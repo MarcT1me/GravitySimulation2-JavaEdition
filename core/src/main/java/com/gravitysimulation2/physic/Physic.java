@@ -1,6 +1,7 @@
 package com.gravitysimulation2.physic;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Physic {
     static float G = 6.67430e-11f;
@@ -15,21 +16,21 @@ public class Physic {
     }
 
     public static Vector2 calculateTidalForce(
-            Vector2 primaryPos, float primaryMass,
-            Vector2 satellitePos, float satelliteRadius, float satelliteMass
+        Vector2 primaryPos, float primaryMass,
+        Vector2 satellitePos, float satelliteRadius, float satelliteMass
     ) {
         Vector2 delta = satellitePos.cpy().sub(primaryPos);
         float distance = delta.len();
         if (distance == 0) return new Vector2();
 
-        float tidalAcceleration = (2 * G * primaryMass * satelliteRadius) / (distance * distance * distance);
+        float tidalAcceleration = (2 * G * primaryMass * satelliteRadius) / (distance * distance);
 
         return delta.nor().scl(tidalAcceleration * satelliteMass);
     }
 
     public static Vector2 calculateGravityForce(
-            Vector2 primaryPos, float primaryMass,
-            Vector2 satellitePos, float satelliteMass
+        Vector2 primaryPos, float primaryMass,
+        Vector2 satellitePos, float satelliteMass
     ) {
         if (primaryPos == satellitePos)
             return new Vector2();
@@ -42,13 +43,19 @@ public class Physic {
         float forceDir = (float) Math.atan2(distVec.y, distVec.x);
 
         return new Vector2(
-                forceMagnitude * (float) Math.cos(forceDir),
-                forceMagnitude * (float) Math.sin(forceDir)
+            forceMagnitude * (float) Math.cos(forceDir),
+            forceMagnitude * (float) Math.sin(forceDir)
         );
     }
 
     public static Vector2 calculateRadiationPressureForce(float power, Vector2 direction, float area) {
         float forceMagnitude = (power * area) / C_LIGHT;
         return direction.nor().scl(forceMagnitude);
+    }
+
+    public Vector3 calculateThrustForceAndMassLess(Vector2 direction, float exhaustVelocity, float deltaTime) {
+        float massLoss = deltaTime * exhaustVelocity; // Упрощённо
+        Vector2 thrust = direction.scl(exhaustVelocity * massLoss / deltaTime);
+        return new Vector3(thrust.x, thrust.y, massLoss);
     }
 }

@@ -2,7 +2,6 @@ package com.gravitysimulation2.objects.scene;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
-import com.gravitysimulation2.Identifier;
 import com.gravitysimulation2.objects.*;
 
 import java.util.HashMap;
@@ -11,7 +10,7 @@ import java.util.Map;
 public class GameScene implements IUpdatable, IRenderer, IUiRenderer, Disposable {
     private static GameScene current;
 
-    public final Map<Identifier, GameObject> objects = new HashMap<>();
+    public final Map<String, GameObject> objects = new HashMap<>();
     public final Map<String, Float> speeds = new HashMap<>();
 
     public Camera camera;

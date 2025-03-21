@@ -1,8 +1,8 @@
 package com.gravitysimulation2;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.gravitysimulation2.config.*;
 import com.gravitysimulation2.menu.MainMenu;
 import com.gravitysimulation2.menu.MenuObject;
 import com.gravitysimulation2.menu.load.LoadMenu;
@@ -24,6 +24,8 @@ public class GravitySimulation2 extends Game {
     public void create() {
         initAllMenu();
         setScreen(menuMap.get("main"));
+        ConfigManager.load(GameConfig.class, "game config");
+        ConfigManager.load(WindowConfig.class, "window config");
     }
 
     public void initAllMenu() {

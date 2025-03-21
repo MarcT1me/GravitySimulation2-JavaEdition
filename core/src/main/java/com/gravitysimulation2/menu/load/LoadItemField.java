@@ -1,6 +1,5 @@
 package com.gravitysimulation2.menu.load;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -9,20 +8,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gravitysimulation2.menu.MenuObject;
 
 public class LoadItemField extends MenuObject {
-    private String name;
-    private float time;
+    private final String name;
+    private final float time;
 
     public LoadItemField(String name, float time) {
         super();
 
         this.name = name;
         this.time = time;
-
-        actor = setupUI();
     }
 
     @Override
-    protected Actor setupUI() {
+    protected void setupUI() {
         Table table = new Table();
         stage.addActor(table);
         table.defaults().expandX();
@@ -44,6 +41,8 @@ public class LoadItemField extends MenuObject {
         Label timeLbl = new Label(String.valueOf(time), skin);
         table.add(timeLbl).right().padRight(225);
 
-        return table;
+        rootGroup.addActor(table);
+        table.setSize(table.getPrefWidth(), table.getPrefHeight());
+        table.setPosition(table.getPrefWidth() / 2f, table.getPrefHeight() / 2f);
     }
 }

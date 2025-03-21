@@ -1,4 +1,4 @@
-package com.gravitysimulation2.objects.RendererObject;
+package com.gravitysimulation2.objects.rendererobject;
 
 public enum RendererObjectTypes {
     STAR("Star", "big space Light"),

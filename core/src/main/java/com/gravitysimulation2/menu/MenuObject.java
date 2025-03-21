@@ -2,32 +2,63 @@ package com.gravitysimulation2.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public abstract class MenuObject implements Screen {
     protected final Stage stage;
     protected final Skin skin;
 
-    public Actor actor;
+    public Group rootGroup;
 
     public MenuObject() {
         ScreenViewport viewport = new ScreenViewport();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-
-        actor = setupUI();
     }
 
-    protected abstract Actor setupUI();
+    protected abstract void setupUI();
+
+    protected Label createLabel(
+        String text, Color color, float fontSize, float x, float y
+    ) {
+        Label label = new Label(text, skin);
+        label.setColor(color);
+        label.setFontScale(fontSize);
+        label.setSize(label.getPrefWidth(), label.getPrefHeight());
+        label.setPosition(x, y);
+        return label;
+    }
+
+    protected TextButton createTextButton(
+        String text,
+        float x, float y,
+        float width, float height
+    ) {
+        TextButton btn = new TextButton(text, skin);
+        btn.setSize(width, height);
+        btn.setPosition(x, y);
+        return btn;
+    }
+
+    public MenuObject updateRootGroup() {
+        stage.clear();
+        rootGroup = new Group();
+        setupUI();
+        stage.addActor(rootGroup);
+        return this;
+    }
 
     @Override
     public void resize(int width, int height) {
-        actor = setupUI();
-        stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.getViewport().update(width, height, true);
+        updateRootGroup();
     }
 
     @Override
@@ -39,7 +70,7 @@ public abstract class MenuObject implements Screen {
     public void resume() {
 
     }
-    
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);

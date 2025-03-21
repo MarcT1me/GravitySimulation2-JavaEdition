@@ -1,4 +1,4 @@
-package com.gravitysimulation2.objects.RendererObject;
+package com.gravitysimulation2.objects.rendererobject;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;

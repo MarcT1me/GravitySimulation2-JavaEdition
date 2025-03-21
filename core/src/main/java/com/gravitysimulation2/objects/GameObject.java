@@ -2,7 +2,7 @@ package com.gravitysimulation2.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.gravitysimulation2.objects.RendererObject.*;
+import com.gravitysimulation2.objects.rendererobject.*;
 import com.gravitysimulation2.objects.scene.GameScene;
 import com.gravitysimulation2.physic.PhysicBody;
 
@@ -11,10 +11,10 @@ public class GameObject extends PhysicBody implements IUpdatable, IRenderer, IUi
 
     public GameObject(
         RendererObjectTypes objectType,
+        RendererObjectData rendererData,
         Vector2 pos, float angle,
         float mass, float density, float radius,
-        Vector2 velocity, float angularVelocity,
-        RendererObjectData rendererData
+        Vector2 velocity, float angularVelocity
     ) {
         super(
             pos, angle,

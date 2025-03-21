@@ -5,7 +5,20 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-  if(enableGraalNative == 'true') {
+  if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
+}
+
+processResources {
+  // load file and properties
+  def gamePropertiesFile = file "src/main/resources/game.properties"
+  def gameProperties = new Properties()
+  gamePropertiesFile.withReader { gameProperties.load(gamePropertiesFile.newReader()) }
+
+  // change data
+  gameProperties.setProperty('game.releaseDate', new Date().format('yyyy-MM-dd-HH:mm:ss'))
+  gameProperties.setProperty('game.version', project.version.toString())
+
+  gamePropertiesFile.withWriter { gameProperties.store(it, null) }
 }

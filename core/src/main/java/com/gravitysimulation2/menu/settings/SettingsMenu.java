@@ -1,8 +1,6 @@
 package com.gravitysimulation2.menu.settings;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -11,13 +9,14 @@ import com.gravitysimulation2.menu.MenuObject;
 
 public class SettingsMenu extends MenuObject {
     @Override
-    protected Actor setupUI() {
+    protected void setupUI() {
         Table table = new Table();
-        table.setFillParent(true);
         stage.addActor(table);
 
-        GraphicsMenuField graphicSettings = new GraphicsMenuField();
-        table.add(graphicSettings.actor).row();
+        GraphicsMenuField graphicSettings = (GraphicsMenuField) new GraphicsMenuField().updateRootGroup();
+        table.addActor(graphicSettings.rootGroup);
+
+        table.row();
 
         TextButton applyButton = new TextButton("Apply", skin);
         applyButton.addListener(
@@ -52,7 +51,8 @@ public class SettingsMenu extends MenuObject {
         );
         table.add(backButton).right().size(50, 30).colspan(2).padTop(20);
 
-
-        return table;
+        rootGroup.addActor(table);
+        table.setSize(table.getPrefWidth(), table.getPrefHeight());
+        table.setPosition(table.getPrefWidth() / 2f, table.getPrefHeight() / 2f);
     }
 }

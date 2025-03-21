@@ -1,13 +1,12 @@
-package com.gravitysimulation2.objects.RendererObject;
+package com.gravitysimulation2.objects.rendererobject;
 
 import com.badlogic.gdx.math.Vector3;
 import com.gravitysimulation2.objects.GameObject;
-import com.gravitysimulation2.objects.IUiRenderer;
 
-public class PlanetRenderer extends RendererObject implements IUiRenderer {
+public class StarRenderer extends RendererObject {
     protected Vector3 color;
 
-    public PlanetRenderer(GameObject sourceObject, RendererObjectData rendererData) {
+    public StarRenderer(GameObject sourceObject, RendererObjectData rendererData) {
         super(sourceObject);
         this.color = rendererData.color();
     }
