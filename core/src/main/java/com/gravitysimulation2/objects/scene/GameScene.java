@@ -2,6 +2,7 @@ package com.gravitysimulation2.objects.scene;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.menu.MenuObject;
 import com.gravitysimulation2.objects.*;
 
@@ -10,6 +11,8 @@ import java.util.Map;
 
 public class GameScene extends MenuObject implements IUpdatable, IRenderer, Disposable {
     private static GameScene current;
+    public static boolean loaded = false;
+    private SceneScreen sceneScreen;
 
     public String name;
 
@@ -23,6 +26,13 @@ public class GameScene extends MenuObject implements IUpdatable, IRenderer, Disp
     public GameScene(String name) {
         this.name = name;
         shapeRenderer = new ShapeRenderer();
+        sceneScreen = (SceneScreen) GravitySimulation2.instance.menuMap.get("scene");
+    }
+
+    public static GameScene createNew(String name) {
+        GameScene scene = new GameScene(name);
+        GameScene.setCurrent(scene, false);
+        return scene;
     }
 
     public void setCamera(Camera camera) {
@@ -33,8 +43,9 @@ public class GameScene extends MenuObject implements IUpdatable, IRenderer, Disp
         return current;
     }
 
-    public static void setCurrent(GameScene scene) {
+    public static void setCurrent(GameScene scene, boolean setLoaded) {
         current = scene;
+        loaded = setLoaded;
     }
 
     public void addObject(GameObject object) {
@@ -80,9 +91,15 @@ public class GameScene extends MenuObject implements IUpdatable, IRenderer, Disp
 
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
+        current = null;
+        loaded = false;
+
+        // objects
         objects.values().forEach(
             GameObject::dispose
         );
+
+        // this scene
+        shapeRenderer.dispose();
     }
 }

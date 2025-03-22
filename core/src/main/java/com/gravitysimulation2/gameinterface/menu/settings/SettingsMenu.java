@@ -8,6 +8,7 @@ import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.menu.MenuObject;
 import com.gravitysimulation2.gameinterface.menu.settings.fields.GameMenuField;
 import com.gravitysimulation2.gameinterface.menu.settings.fields.GraphicsMenuField;
+import com.gravitysimulation2.objects.scene.GameScene;
 
 public class SettingsMenu extends MenuObject {
     GameMenuField gameSettings;
@@ -138,7 +139,11 @@ public class SettingsMenu extends MenuObject {
             new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    GravitySimulation2.instance.setScreen(GravitySimulation2.instance.menuMap.get("main"));
+                    if (GameScene.loaded) {
+                        GravitySimulation2.setGameScreen("pause");
+                    } else {
+                        GravitySimulation2.setGameScreen("main");
+                    }
                 }
             }
         );

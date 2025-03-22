@@ -109,7 +109,7 @@ public class GraphicsMenuField extends MenuObject {
         curPosY -= relativePad + targetFpsLbl.getHeight();
         targetFpsLbl.setPosition(startPosX + relativePad, curPosY);
 
-        fpsSlider = createSlider(30, 300, 1, false, Color.BLUE);
+        fpsSlider = createSlider(0, 300, 1, false, Color.BLUE);
         fpsSlider.setValue(windowConfig.targetFPS);
         fpsSlider.setPosition(
             startPosX + targetFpsLbl.getWidth() + relativePad * 3,
@@ -147,13 +147,13 @@ public class GraphicsMenuField extends MenuObject {
         } else {
             maxFps = 300;
         }
-        fpsSlider.setRange(30, maxFps);
+        fpsSlider.setRange(0, maxFps);
 
         if (fpsSlider.getValue() > maxFps) {
             fpsSlider.setValue(maxFps);
         }
 
-        fpsSliderValueLbl.setText("fps: " + (int) fpsSlider.getValue());
+        fpsSliderValueLbl.setText("fps: " + (fpsSlider.getValue() == 0f ? "unlimited" : (int) fpsSlider.getValue()));
     }
 
     private String getCurrentResolution() {
@@ -166,7 +166,9 @@ public class GraphicsMenuField extends MenuObject {
 
     private Graphics.DisplayMode getMonitorSelectDisplayMode() {
         String selectedMonitor = monitorSelect.getSelected();
-        if (selectedMonitor.equals("auto")) {
+        if (selectedMonitor.equals("auto") ||
+            Integer.parseInt(selectedMonitor.split("-")[0]) == windowConfig.selectedMonitor
+        ) {
             return Gdx.graphics.getDisplayMode();
         } else {
             String[] mon = selectedMonitor.split("-");
@@ -202,7 +204,7 @@ public class GraphicsMenuField extends MenuObject {
     }
 
     public void resetSettings() {
-        windowConfig = new WindowConfig();
+        windowConfig = windowConfig.getDefaultConfig();
         ConfigManager.addConfig("window config", windowConfig);
         applyGraphicsSettings();
     }

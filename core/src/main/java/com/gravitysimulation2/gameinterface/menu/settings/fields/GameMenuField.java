@@ -131,7 +131,7 @@ public class GameMenuField extends MenuObject {
     }
 
     public void resetSettings() {
-        gameConfig = new GameConfig();
+        gameConfig = gameConfig.getDefaultConfig();
         ConfigManager.addConfig("game config", gameConfig);
         applyConfig();
     }

@@ -14,9 +14,16 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class LoadMenu extends MenuObject {
+    List<LoadItemField> items = new LinkedList<>();
+    float itemsPosY;
+
+    float screenCenterX;
+    float relativePad;
+
     @Override
     public void setupUI() {
-        float screenCenterX = Gdx.graphics.getWidth() / 2f;
+        screenCenterX = Gdx.graphics.getWidth() / 2f;
+        relativePad = getRelativeScreenHeightScalar(10f);
 
         float relativeFontSize = getRelativeScreenHeightScalar(4f);
         float relativeButtonFontSize = relativeFontSize / 2f;
@@ -24,23 +31,17 @@ public class LoadMenu extends MenuObject {
         float relativeButtonSizeX = getRelativeScreenWidthScalar(60f);
         float relativeButtonSizeY = getRelativeScreenHeightScalar(40f);
 
-        float relativePad = getRelativeScreenHeightScalar(10f);
-
         // load
         Label loadLbl = createLabel("Load", Color.WHITE, relativeFontSize);
-        loadLbl.setPosition(screenCenterX - loadLbl.getWidth() / 2f,
+        loadLbl.setPosition(
+            screenCenterX - loadLbl.getWidth() / 2f,
             Gdx.graphics.getHeight() - loadLbl.getHeight() - relativePad
         );
 
-        // test item
-        List<LoadItemField> items = new LinkedList<>();
-
-        items.add(createLoadItem(
-                new SaveConfig("untitled"),
-                screenCenterX - rootGroup.getWidth() / 2f,
-                Gdx.graphics.getHeight() - rootGroup.getHeight() - loadLbl.getHeight() - relativePad * 2
-            )
-        );
+        itemsPosY = Gdx.graphics.getHeight() - loadLbl.getHeight();
+        for (SaveConfig saveConfig : SaveConfig.scanSaves()) {
+            addLoadItem(saveConfig);
+        }
 
         // back
         TextButton backButton = createTextButton(
@@ -70,12 +71,17 @@ public class LoadMenu extends MenuObject {
         rootGroup.addActor(backButton);
     }
 
-    private LoadItemField createLoadItem(SaveConfig saveConfig, float x, float y) {
-        LoadItemField loadItem = (LoadItemField) new LoadItemField(
-            saveConfig.name, saveConfig.lastLoadTime, saveConfig.createTime
-        ).updateRootGroup();
+    private void addLoadItem(SaveConfig saveConfig) {
+        LoadItemField loadItem = createLoadItem(saveConfig);
+        itemsPosY -= relativePad + loadItem.rootGroup.getHeight();
+        loadItem.rootGroup.setPosition(
+            screenCenterX - loadItem.rootGroup.getWidth() / 2f,
+            itemsPosY
+        );
+        items.add(loadItem);
+    }
 
-        loadItem.rootGroup.setPosition(x, y);
-        return loadItem;
+    private LoadItemField createLoadItem(SaveConfig saveConfig) {
+        return (LoadItemField) new LoadItemField(saveConfig).updateRootGroup();
     }
 }

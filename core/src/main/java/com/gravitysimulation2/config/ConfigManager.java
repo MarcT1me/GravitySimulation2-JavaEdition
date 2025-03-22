@@ -2,35 +2,15 @@ package com.gravitysimulation2.config;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigManager {
-    static {
-        Json json = new Json();
-        json.setSerializer(Vector2.class, new Json.Serializer<>() {
-            @Override
-            public void write(Json json, Vector2 vector, Class knownType) {
-                json.writeArrayStart();
-                json.writeValue(vector.x);
-                json.writeValue(vector.y);
-                json.writeArrayEnd();
-            }
-
-            @Override
-            public Vector2 read(Json json, JsonValue jsonData, Class type) {
-                return new Vector2(
-                    jsonData.get(0).asFloat(),
-                    jsonData.get(1).asFloat()
-                );
-            }
-        });
-    }
+    public static Class<?>[] emptyParametersTypes = new Class[]{};
+    public static Object[] emptyParameters = new Object[]{};
 
     private static final Map<String, Config<?>> configs = new HashMap<>();
 
@@ -50,11 +30,14 @@ public class ConfigManager {
     }
 
     // loading config with name into class
-    public static <T extends Config<T>> T load(Class<T> configClass, String name) {
+    public static <T extends Config<T>> T load(
+        Class<T> configClass, String name,
+        Class<?>[] parametersTypes, Object[] parameters) {
         T resultConfig;
 
         try {
-            T instance = configClass.getDeclaredConstructor().newInstance();
+            T instance = configClass.getDeclaredConstructor(parametersTypes).newInstance(parameters);
+
             FileHandle configFile = Gdx.files.local(instance.getConfigPath());
 
             if (configFile.exists()) {

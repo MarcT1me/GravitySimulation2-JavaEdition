@@ -1,12 +1,12 @@
 package com.gravitysimulation2.save;
 
-import com.badlogic.gdx.math.Vector2;
 import com.gravitysimulation2.config.Config;
 import com.gravitysimulation2.config.GameConfig;
 import com.gravitysimulation2.objects.scene.GameScene;
 
 public class CameraConfig implements Config<CameraConfig> {
-    public Vector2 pos = new Vector2();
+    public float posX = 0f;
+    public float posY = 0f;
     public float zoom = 1.0f;
 
     @Override

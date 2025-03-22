@@ -36,18 +36,16 @@ public class SceneParser {
         float radius = ((Number) objectData.get("radius")).floatValue();
         float angularVelocity = ((Number) objectData.get("angularVelocity")).floatValue();
 
-        Map<String, Object> objectTypeData = (Map<String, Object>) objectData.get("objectType");
-        String objectTypeName = (String) objectTypeData.get("type");
-        List<Double> colorList = (List<Double>) objectTypeData.get("color");
+        Map<String, Object> objectOtherData = (Map<String, Object>) objectData.get("objectData");
+        String objectTypeName = (String) objectOtherData.get("type");
+        List<Long> colorList = (List<Long>) objectOtherData.get("color");
         Vector3 color = new Vector3(
-            colorList.get(0).floatValue(),
-            colorList.get(1).floatValue(),
-            colorList.get(2).floatValue()
+            colorList.get(0),
+            colorList.get(1),
+            colorList.get(2)
         );
 
         return new GameObject(objectName,
-//            Enum.valueOf(ObjectTypes.class, objectTypeName),
-//            new RendererObjectData().color(color),
             pos, angle,
             mass, density, radius,
             velocity, angularVelocity
@@ -72,7 +70,7 @@ public class SceneParser {
             return map;
         } else if (jsonValue.isArray()) {
             List<Object> list = new ArrayList<>();
-            JsonValue child = jsonValue;
+            JsonValue child = jsonValue.child; // Начинаем с первого элемента массива
             while (child != null) {
                 list.add(parseJson(child));
                 child = child.next;
@@ -80,6 +78,7 @@ public class SceneParser {
             return list;
         } else {
             if (jsonValue.isBoolean()) return jsonValue.asBoolean();
+            else if (jsonValue.isLong()) return jsonValue.asLong();
             else if (jsonValue.isDouble()) return jsonValue.asDouble();
             else if (jsonValue.isString()) return jsonValue.asString();
             else return null;
