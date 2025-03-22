@@ -3,17 +3,14 @@ package com.gravitysimulation2.objects.rendererobject;
 import com.badlogic.gdx.math.Vector3;
 import com.gravitysimulation2.objects.GameObject;
 
-public class SatelliteRenderer extends RendererObject {
+import java.util.Map;
+
+public class PlanetObject extends RendererObject {
     protected Vector3 color;
 
-    public SatelliteRenderer(GameObject sourceObject, RendererObjectData rendererData) {
-        super(sourceObject);
-        this.color = rendererData.color();
-    }
-
-    @Override
-    public void uiElement() {
-
+    public PlanetObject(GameObject sourceObject, Map<String, Object> rendererData) {
+        super(sourceObject, rendererData);
+        this.rendererData = rendererData;
     }
 
     @Override

@@ -11,11 +11,10 @@ public class WindowConfig implements Config<WindowConfig> {
 
     // fps
     public boolean vsync = true;
-    public int targetFPS = 60;
+    public int targetFPS = 0;
 
     // monitor
     public int selectedMonitor = -1;
-    private final Graphics.Monitor[] monitors = Gdx.graphics.getMonitors();
 
     @Override
     public String getConfigPath() {
@@ -28,6 +27,7 @@ public class WindowConfig implements Config<WindowConfig> {
     }
 
     public void apply() {
+        Graphics.Monitor[] monitors = Gdx.graphics.getMonitors();
         // window mode
         if (fullscreen) {
             Gdx.graphics.setFullscreenMode(

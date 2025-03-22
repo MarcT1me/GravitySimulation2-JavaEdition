@@ -1,19 +1,16 @@
 package com.gravitysimulation2.objects.rendererobject;
 
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.gravitysimulation2.objects.GameObject;
 
-public class StarRenderer extends RendererObject {
+import java.util.Map;
+
+public class SatelliteObject extends RendererObject {
     protected Vector3 color;
 
-    public StarRenderer(GameObject sourceObject, RendererObjectData rendererData) {
-        super(sourceObject);
-        this.color = rendererData.color();
-    }
-
-    @Override
-    public void uiElement() {
-
+    public SatelliteObject(GameObject sourceObject, Map<String, Object> rendererData) {
+        super(sourceObject, rendererData);
     }
 
     @Override

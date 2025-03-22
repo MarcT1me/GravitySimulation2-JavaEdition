@@ -2,13 +2,16 @@ package com.gravitysimulation2.objects.scene;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import com.gravitysimulation2.gameinterface.menu.MenuObject;
 import com.gravitysimulation2.objects.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameScene implements IUpdatable, IRenderer, IUiRenderer, Disposable {
+public class GameScene extends MenuObject implements IUpdatable, IRenderer, Disposable {
     private static GameScene current;
+
+    public String name;
 
     public final Map<String, GameObject> objects = new HashMap<>();
     public final Map<String, Float> speeds = new HashMap<>();
@@ -17,7 +20,8 @@ public class GameScene implements IUpdatable, IRenderer, IUiRenderer, Disposable
 
     public ShapeRenderer shapeRenderer;
 
-    public GameScene() {
+    public GameScene(String name) {
+        this.name = name;
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -31,6 +35,14 @@ public class GameScene implements IUpdatable, IRenderer, IUiRenderer, Disposable
 
     public static void setCurrent(GameScene scene) {
         current = scene;
+    }
+
+    public void addObject(GameObject object) {
+        objects.put(object.name, object);
+    }
+
+    public void delObject(GameObject object) {
+        objects.remove(object.name);
     }
 
     @Override
@@ -48,13 +60,6 @@ public class GameScene implements IUpdatable, IRenderer, IUiRenderer, Disposable
     }
 
     @Override
-    public void uiElement() {
-        objects.values().forEach(
-            GameObject::uiElement
-        );
-    }
-
-    @Override
     public void render() {
         shapeRenderer.begin();
         objects.values().forEach(
@@ -62,6 +67,15 @@ public class GameScene implements IUpdatable, IRenderer, IUiRenderer, Disposable
         );
         shapeRenderer.end();
         shapeRenderer.flush();
+    }
+
+    @Override
+    protected void setupUI() {
+        objects.values().forEach(
+            (object) -> {
+                rootGroup.addActor(rootGroup);
+            }
+        );
     }
 
     @Override

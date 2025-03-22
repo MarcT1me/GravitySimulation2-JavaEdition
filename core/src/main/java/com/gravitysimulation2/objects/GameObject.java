@@ -2,16 +2,19 @@ package com.gravitysimulation2.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.gravitysimulation2.objects.rendererobject.*;
+//import com.gravitysimulation2.objects.rendererobject.*;
 import com.gravitysimulation2.objects.scene.GameScene;
 import com.gravitysimulation2.physic.PhysicBody;
 
-public class GameObject extends PhysicBody implements IUpdatable, IRenderer, IUiRenderer, Disposable {
-    private RendererObject renderer;
+public class GameObject extends PhysicBody implements IUpdatable, IRenderer, Disposable {
+    public String name;
+
+//    private RendererObject renderer;
 
     public GameObject(
-        RendererObjectTypes objectType,
-        RendererObjectData rendererData,
+        String name,
+//        ObjectTypes objectType,
+//        RendererObjectData rendererData,
         Vector2 pos, float angle,
         float mass, float density, float radius,
         Vector2 velocity, float angularVelocity
@@ -22,17 +25,19 @@ public class GameObject extends PhysicBody implements IUpdatable, IRenderer, IUi
             velocity, angularVelocity
         );
 
-        switch (objectType) {
-            case PLANET:
-                renderer = new PlanetRenderer(this, rendererData);
-                break;
-            case SATELLITE:
-                renderer = new SatelliteRenderer(this, rendererData);
-                break;
-            case STAR:
-                renderer = new StarRenderer(this, rendererData);
-                break;
-        }
+        this.name = name;
+
+//        switch (objectType) {
+//            case PLANET:
+//                renderer = new PlanetObject(this, rendererData);
+//                break;
+//            case SATELLITE:
+//                renderer = new SatelliteObject(this, rendererData);
+//                break;
+//            case STAR:
+//                renderer = new StarObject(this, rendererData);
+//                break;
+//        }
     }
 
     @Override
@@ -47,18 +52,12 @@ public class GameObject extends PhysicBody implements IUpdatable, IRenderer, IUi
     }
 
     @Override
-    public void uiElement() {
-        renderer.uiElement();
-        return;
-    }
-
-    @Override
     public void render() {
-        renderer.render();
+//        renderer.render();
     }
 
     @Override
     public void dispose() {
-        renderer.dispose();
+//        renderer.dispose();
     }
 }

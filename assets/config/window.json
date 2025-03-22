@@ -1,6 +1,5 @@
 {
-  "fullscreen": false,
-  "windowWidth": 720,
-  "windowHeight": 480,
-  "selectedMonitor": -1
+"windowWidth": 720,
+"windowHeight": 480,
+"selectedMonitor": 0
 }

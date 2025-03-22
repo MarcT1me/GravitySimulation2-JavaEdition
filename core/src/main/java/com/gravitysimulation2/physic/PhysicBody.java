@@ -123,9 +123,9 @@ public class PhysicBody extends Physic {
         updateGravityForce();
         F_total.add(F_gravity);
 
-        updateTidalForce();
+//        updateTidalForce();
 
-        updateRotationForces();
+//        updateRotationForces();
     }
 
     public void updateAngularVelocity() {

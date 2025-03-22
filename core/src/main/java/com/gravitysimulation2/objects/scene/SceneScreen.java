@@ -1,61 +1,30 @@
 package com.gravitysimulation2.objects.scene;
 
-import com.badlogic.gdx.Screen;
-import com.gravitysimulation2.objects.IUpdatable;
+import com.gravitysimulation2.gameinterface.menu.MenuObject;
 
-public class SceneScreen implements Screen, IUpdatable {
-    @Override
-    public void show() {
-        // Prepare your screen here.
+public class SceneScreen extends MenuObject {
+    private final GameScene scene;
+
+    public SceneScreen(GameScene scene) {
+        this.scene = scene;
     }
 
     @Override
-    public void preUpdate(float deltaTime) {
-        GameScene scene = GameScene.getCurrent();
-        if (scene != null)
-            scene.preUpdate(deltaTime);
-    }
-
-    @Override
-    public void update(float deltaTime) {
-        GameScene scene = GameScene.getCurrent();
-        if (scene != null)
-            scene.update(deltaTime);
+    protected void setupUI() {
+        scene.updateRootGroup();
+        rootGroup.addActor(scene.rootGroup);
     }
 
     @Override
     public void render(float delta) {
-        preUpdate(delta);
-        update(delta);
-        GameScene scene = GameScene.getCurrent();
-        if (scene != null){
-            scene.render();
-            scene.uiElement();
-        }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
-    }
-
-    @Override
-    public void pause() {
-        // Invoked when your application is paused.
-    }
-
-    @Override
-    public void resume() {
-        // Invoked when your application is resumed after pause.
-    }
-
-    @Override
-    public void hide() {
-        // This method is called when another screen replaces this one.
+        super.render(delta);
+        scene.preUpdate(delta);
+        scene.update(delta);
+        scene.render();
     }
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
+        scene.dispose();
     }
 }

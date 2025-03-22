@@ -18,7 +18,7 @@ public class Lwjgl3Launcher {
                 @Override
                 public void create() {
                     super.create();
-                    ((WindowConfig) ConfigManager.getLoaded("window config")).apply();
+                    ((WindowConfig) ConfigManager.getConfig("window config")).apply();
                     ((Lwjgl3Graphics) Gdx.graphics).getWindow().setVisible(true);
                 }
             },
@@ -32,8 +32,7 @@ public class Lwjgl3Launcher {
         lwjglConfig.setInitialVisible(false);
 
         lwjglConfig.setTitle(GameConfig.windowTitle + "  " + GameConfig.version);
-        // config.setWindowIcon("gs128.png", "gs64.png", "gs32.png", "gs16.png");
-        lwjglConfig.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
+        lwjglConfig.setWindowIcon("GS2ico128.png", "GS2ico64.png", "GS2ico32.png", "GS2ico16.png");
 
         lwjglConfig.setResizable(GameConfig.isResizable);
         lwjglConfig.setAutoIconify(true);

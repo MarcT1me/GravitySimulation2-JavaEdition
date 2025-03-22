@@ -7,7 +7,7 @@ public class GameConfig implements Config<GameConfig> {
     // start properties
     public static String savesDir = "";
     // game
-    public static boolean isRelease = true;
+    public static boolean isDebugUi = true;
     public static String version = "0.0.0";
     public static String releaseDate;
     // window
@@ -15,6 +15,7 @@ public class GameConfig implements Config<GameConfig> {
     public static boolean isResizable = false;
 
     // show settings
+    public float interfaceSize = 1;
     public boolean showFps = true;
     public boolean showVersion = true;
     public boolean showVVectors = true;
@@ -31,8 +32,8 @@ public class GameConfig implements Config<GameConfig> {
 
             savesDir = prop.getProperty("savesDir", savesDir);
 
-            isRelease = Boolean.parseBoolean(
-                prop.getProperty("game.isRelease", String.valueOf(isRelease))
+            isDebugUi = Boolean.parseBoolean(
+                prop.getProperty("game.isDebugUi", String.valueOf(isDebugUi))
             );
             version = prop.getProperty("game.version", version);
             releaseDate = prop.getProperty("game.releaseDate", "");

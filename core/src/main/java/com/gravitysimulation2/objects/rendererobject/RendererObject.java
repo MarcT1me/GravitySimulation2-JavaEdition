@@ -8,28 +8,30 @@ import com.gravitysimulation2.objects.GameObject;
 import com.gravitysimulation2.objects.IRenderer;
 import com.gravitysimulation2.objects.scene.GameScene;
 
+import java.util.Map;
+
 public abstract class RendererObject implements IRenderer, Disposable {
     public GameObject sourceObject;
     protected ShapeRenderer shapeRenderer;
+    protected Map<String, Object> rendererData;
 
-    public RendererObject(GameObject sourceObject) {
+    public RendererObject(GameObject sourceObject, Map<String, Object> rendererData) {
         this.sourceObject = sourceObject;
+        this.rendererData = rendererData;
         this.shapeRenderer = GameScene.getCurrent().shapeRenderer;
     }
 
     public Vector2 fromWorldToScreenVector2(Vector2 vec) {
         Camera camera = GameScene.getCurrent().camera;
         return new Vector2(
-                (vec.x - camera.pos.x) / camera.zoom,
-                (vec.y - camera.pos.y) / camera.zoom
+            (vec.x - camera.pos.x) / camera.zoom,
+            (vec.y - camera.pos.y) / camera.zoom
         );
     }
 
     public float fromWorldToScreenScalar(float scalar) {
         return scalar / GameScene.getCurrent().camera.zoom;
     }
-
-    public abstract void uiElement();
 
     @Override
     public void render() {
