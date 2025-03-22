@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 public class LoadMenu extends MenuObject {
     @Override
-    protected void setupUI() {
+    public void setupUI() {
         float screenCenterX = Gdx.graphics.getWidth() / 2f;
 
         float relativeFontSize = getRelativeScreenHeightScalar(4f);

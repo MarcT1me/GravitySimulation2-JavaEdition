@@ -1,10 +1,6 @@
 package com.gravitysimulation2.gameinterface.menu.settings;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,7 +16,7 @@ public class SettingsMenu extends MenuObject {
     int currentField = 0;
 
     @Override
-    protected void setupUI() {
+    public void setupUI() {
         float relativeButtonFontSize = getRelativeScreenHeightScalar(2f);
         float relativeButtonSizeX = getRelativeScreenWidthScalar(50f);
         float relativeButtonSizeY = getRelativeScreenHeightScalar(40f);
@@ -160,6 +156,13 @@ public class SettingsMenu extends MenuObject {
         rootGroup.addActor(applyButton);
         rootGroup.addActor(resetButton);
         rootGroup.addActor(backButton);
+    }
+
+    @Override
+    public void renderUiElements() {
+        super.renderUiElements();
+        gameSettings.renderUiElements();
+        graphicSettings.renderUiElements();
     }
 
     @Override

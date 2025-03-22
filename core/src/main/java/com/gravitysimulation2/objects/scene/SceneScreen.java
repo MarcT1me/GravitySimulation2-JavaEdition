@@ -10,7 +10,7 @@ public class SceneScreen extends MenuObject {
     }
 
     @Override
-    protected void setupUI() {
+    public void setupUI() {
         scene.updateRootGroup();
         rootGroup.addActor(scene.rootGroup);
     }

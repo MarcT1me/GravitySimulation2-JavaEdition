@@ -15,11 +15,14 @@ public class GraphicsMenuField extends MenuObject {
     public float categoryStartX;
     WindowConfig windowConfig;
 
-    TextField fpsField;
-    CheckBox VSyncBox;
     CheckBox fullscreenBox;
+    java.util.List<String> monitorsNames;
     SelectBox<String> monitorSelect;
     SelectBox<String> resolutionSelect;
+
+    CheckBox VSyncBox;
+    Slider fpsSlider;
+    Label fpsSliderValueLbl;
 
     public GraphicsMenuField(float categoryStartX) {
         this.categoryStartX = categoryStartX;
@@ -27,7 +30,7 @@ public class GraphicsMenuField extends MenuObject {
     }
 
     @Override
-    protected void setupUI() {
+    public void setupUI() {
         float relativePad = getRelativeScreenHeightScalar(10f);
         float startPosX = categoryStartX + relativePad;
         float curPosY = Gdx.graphics.getHeight();
@@ -46,19 +49,15 @@ public class GraphicsMenuField extends MenuObject {
         fullscreenBox.setPosition(startPosX, curPosY);
 
         // monitor
-        Label monitorLbl = new Label("monitor: ", skin);
-
-        monitorLbl.setFontScale(relativeFontSize);
-        monitorLbl.setColor(Color.WHITE);
-        monitorLbl.setSize(monitorLbl.getPrefWidth(), monitorLbl.getPrefHeight());
-
+        Label monitorLbl = createLabel("monitor:", Color.WHITE, relativeFontSize);
         curPosY -= relativePad + monitorLbl.getHeight();
         monitorLbl.setPosition(startPosX + relativePad, curPosY);
 
         // box
         monitorSelect = new SelectBox<>(skin);
 
-        java.util.List<String> monitorsNames = new LinkedList<>();
+        monitorsNames = new LinkedList<>();
+        monitorsNames.add("auto");
         int i = 0;
         for (Graphics.Monitor monitor : Gdx.graphics.getMonitors()) {
             monitorsNames.add(i + "-" + monitor.name);
@@ -67,18 +66,13 @@ public class GraphicsMenuField extends MenuObject {
 
         Array<String> monitors = new Array<>(monitorsNames.toArray(String[]::new));
         monitorSelect.setItems(monitors);
-        monitorSelect.setSelected(getCurrentResolution());  // callback
+        monitorSelect.setSelected(getCurrentMonitor());  // callback
         monitorSelect.setSize(relativeButtonSizeX, relativeButtonSizeY);
 
         monitorSelect.setPosition(startPosX + relativePad + monitorLbl.getWidth(), curPosY);
 
         // res
-        Label resLbl = new Label("resolution: ", skin);
-
-        resLbl.setFontScale(relativeFontSize);
-        resLbl.setColor(Color.WHITE);
-        resLbl.setSize(resLbl.getPrefWidth(), resLbl.getPrefHeight());
-
+        Label resLbl = createLabel("resolution:", Color.WHITE, relativeFontSize);
         curPosY -= relativePad + resLbl.getHeight();
         resLbl.setPosition(startPosX + relativePad, curPosY);
 
@@ -111,47 +105,85 @@ public class GraphicsMenuField extends MenuObject {
         VSyncBox.setPosition(startPosX, curPosY);
 
         // FPS
-        Label targetFpsLbl = new Label("Target FPS: ", skin);
-
-        targetFpsLbl.setFontScale(relativeFontSize);
-        targetFpsLbl.setColor(Color.WHITE);
-        targetFpsLbl.setSize(targetFpsLbl.getPrefWidth(), targetFpsLbl.getPrefHeight());
-
+        Label targetFpsLbl = createLabel("Target FPS:", Color.WHITE, relativeFontSize);
         curPosY -= relativePad + targetFpsLbl.getHeight();
         targetFpsLbl.setPosition(startPosX + relativePad, curPosY);
 
-        // field
-        fpsField = new TextField(String.valueOf(windowConfig.targetFPS), skin);
+        fpsSlider = createSlider(30, 300, 1, false, Color.BLUE);
+        fpsSlider.setValue(windowConfig.targetFPS);
+        fpsSlider.setPosition(
+            startPosX + targetFpsLbl.getWidth() + relativePad * 3,
+            curPosY
+        );
 
-        fpsField.setMaxLength(3);
-        fpsField.setTextFieldFilter((textField, c) -> Character.isDigit(c));
-        fpsField.setSize(relativePad * 4, relativePad * 3);
-        fpsField.setPosition(
-            startPosX + targetFpsLbl.getWidth() + relativePad,
-            curPosY);
+        fpsSliderValueLbl = createLabel("fps: " + fpsSlider.getValue(), Color.WHITE, relativeFontSize);
+        fpsSliderValueLbl.setPosition(
+            startPosX + targetFpsLbl.getWidth() + fpsSlider.getWidth() + relativePad * 6,
+            curPosY
+        );
 
         /* adding */
         rootGroup.addActor(fullscreenBox);
+        rootGroup.addActor(monitorLbl);
+        rootGroup.addActor(monitorSelect);
         rootGroup.addActor(resLbl);
         rootGroup.addActor(resolutionSelect);
 
         rootGroup.addActor(VSyncBox);
         rootGroup.addActor(targetFpsLbl);
-        rootGroup.addActor(fpsField);
+        rootGroup.addActor(fpsSlider);
+        rootGroup.addActor(fpsSliderValueLbl);
+    }
 
-        rootGroup.addActor(monitorLbl);
-        rootGroup.addActor(monitorSelect);
+    @Override
+    public void renderUiElements() {
+        super.renderUiElements();
+        monitorSelect.setDisabled(!fullscreenBox.isChecked());
+        resolutionSelect.setDisabled(fullscreenBox.isChecked());
+
+        float maxFps;
+        if (VSyncBox.isChecked()) {
+            maxFps = getMonitorSelectDisplayMode().refreshRate;
+        } else {
+            maxFps = 300;
+        }
+        fpsSlider.setRange(30, maxFps);
+
+        if (fpsSlider.getValue() > maxFps) {
+            fpsSlider.setValue(maxFps);
+        }
+
+        fpsSliderValueLbl.setText("fps: " + (int) fpsSlider.getValue());
     }
 
     private String getCurrentResolution() {
         return windowConfig.windowWidth + "x" + windowConfig.windowHeight;
     }
 
+    private String getCurrentMonitor() {
+        return windowConfig.selectedMonitor == -1 ? "auto" : monitorsNames.get(windowConfig.selectedMonitor + 1);
+    }
+
+    private Graphics.DisplayMode getMonitorSelectDisplayMode() {
+        String selectedMonitor = monitorSelect.getSelected();
+        if (selectedMonitor.equals("auto")) {
+            return Gdx.graphics.getDisplayMode();
+        } else {
+            String[] mon = selectedMonitor.split("-");
+            return Gdx.graphics.getDisplayModes()[Integer.parseInt(mon[0])];
+        }
+    }
+
     public void applySettings() {
         windowConfig.fullscreen = fullscreenBox.isChecked();
 
-        String[] mon = monitorSelect.getSelected().split("-");
-        windowConfig.selectedMonitor = Integer.parseInt(mon[0]);
+        String selectedMonitor = monitorSelect.getSelected();
+        if (selectedMonitor.equals("auto")) {
+            windowConfig.selectedMonitor = -1;
+        } else {
+            String[] mon = selectedMonitor.split("-");
+            windowConfig.selectedMonitor = Integer.parseInt(mon[0]);
+        }
 
         String[] res = resolutionSelect.getSelected().split("x");
 
@@ -161,7 +193,7 @@ public class GraphicsMenuField extends MenuObject {
         windowConfig.vsync = VSyncBox.isChecked();
 
         try {
-            windowConfig.targetFPS = Integer.parseInt(fpsField.getText());
+            windowConfig.targetFPS = (int) fpsSlider.getValue();
         } catch (NumberFormatException e) {
             windowConfig.targetFPS = 60;
         }

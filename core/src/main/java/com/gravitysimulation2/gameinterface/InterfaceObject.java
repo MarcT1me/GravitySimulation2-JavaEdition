@@ -3,10 +3,7 @@ package com.gravitysimulation2.gameinterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
 
@@ -51,6 +48,15 @@ public abstract class InterfaceObject {
         return box;
     }
 
+    public static Slider createSlider(float min, float max, float stepSize, boolean vertical, Color color) {
+        Slider slider = new Slider(min, max, stepSize, vertical, skin);
+
+        slider.setColor(color);
+        slider.setSize(slider.getPrefWidth(), slider.getPrefHeight());
+
+        return slider;
+    }
+
     protected static float getRelativeScreenWidthScalar(float width) {
         return (width / 480f) * Gdx.graphics.getWidth() *  // calculate relative scalar
             ((GameConfig) ConfigManager.getConfig("game config")).interfaceSize;  // apply interface size
@@ -61,7 +67,7 @@ public abstract class InterfaceObject {
             ((GameConfig) ConfigManager.getConfig("game config")).interfaceSize;  // apply interface size
     }
 
-    protected abstract void setupUI();
+    public abstract void setupUI();
 
-    protected abstract void renderUiElements();
+    public abstract void renderUiElements();
 }

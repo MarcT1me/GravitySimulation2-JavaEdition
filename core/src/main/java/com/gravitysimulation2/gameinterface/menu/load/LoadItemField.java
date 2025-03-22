@@ -58,7 +58,7 @@ public class LoadItemField extends MenuObject {
     }
 
     @Override
-    protected void setupUI() {
+    public void setupUI() {
         Table table = getSaveTable();
         rootGroup.addActor(table);
         rootGroup.setSize(table.getPrefWidth(), table.getPrefHeight());

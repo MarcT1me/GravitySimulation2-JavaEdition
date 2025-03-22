@@ -70,7 +70,7 @@ public class GameScene extends MenuObject implements IUpdatable, IRenderer, Disp
     }
 
     @Override
-    protected void setupUI() {
+    public void setupUI() {
         objects.values().forEach(
             (object) -> {
                 rootGroup.addActor(rootGroup);

@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.gravitysimulation2.GravitySimulation2;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
 import com.gravitysimulation2.gameinterface.menu.MenuObject;
@@ -14,7 +13,9 @@ public class GameMenuField extends MenuObject {
     public float categoryStartX;
     GameConfig gameConfig;
 
-    TextField interfaceSizeField;
+    Slider interfaceSizeSlider;
+    Label interfaceSizeSliderValueLbl;
+
     CheckBox fpsBox;
     CheckBox versionBox;
     CheckBox VBox;
@@ -28,7 +29,7 @@ public class GameMenuField extends MenuObject {
     }
 
     @Override
-    protected void setupUI() {
+    public void setupUI() {
         float relativePad = getRelativeScreenHeightScalar(10f);
         float curPosY = Gdx.graphics.getHeight();
         float startPosX = categoryStartX + relativePad;
@@ -36,29 +37,20 @@ public class GameMenuField extends MenuObject {
         float relativeFontSize = getRelativeScreenHeightScalar(2f);
 
         // Interface size
-        Label interfaceSizeLbl = new Label("Interface size: ", skin);
-
-        interfaceSizeLbl.setFontScale(relativeFontSize);
-        interfaceSizeLbl.setColor(Color.WHITE);
-        interfaceSizeLbl.setSize(interfaceSizeLbl.getPrefWidth(), interfaceSizeLbl.getPrefHeight());
+        Label interfaceSizeLbl = createLabel("Interface size:", Color.WHITE, relativeFontSize);
         curPosY -= relativePad + interfaceSizeLbl.getHeight();
         interfaceSizeLbl.setPosition(startPosX + relativePad, curPosY);
 
-        // field
-        interfaceSizeField = new TextField(String.valueOf(gameConfig.interfaceSize), skin);
+        interfaceSizeSlider = createSlider(0.5f, 1.5f, 0.1f, false, Color.GRAY);
+        interfaceSizeSlider.setValue(gameConfig.interfaceSize);
+        interfaceSizeSlider.setPosition(
+            categoryStartX + interfaceSizeLbl.getWidth() + relativePad * 3,
+            curPosY
+        );
 
-        interfaceSizeField.setMaxLength(3);
-        interfaceSizeField.setTextFieldFilter((textField, c) -> {
-            if (Character.isDigit(c)) {
-                return true;
-            } else {
-                String currentText = textField.getText();
-                return c == '.' && !currentText.contains(".") && !currentText.isEmpty();
-            }
-        });
-        interfaceSizeField.setSize(relativePad * 4, relativePad * 3f);
-        interfaceSizeField.setPosition(
-            categoryStartX + interfaceSizeLbl.getWidth() + relativePad * 2,
+        interfaceSizeSliderValueLbl = createLabel("size: " + interfaceSizeSlider.getValue(), Color.WHITE, relativeFontSize);
+        interfaceSizeSliderValueLbl.setPosition(
+            startPosX + interfaceSizeLbl.getWidth() + interfaceSizeSlider.getWidth() + relativePad * 6,
             curPosY
         );
 
@@ -109,7 +101,9 @@ public class GameMenuField extends MenuObject {
 
         /* adding */
         rootGroup.addActor(interfaceSizeLbl);
-        rootGroup.addActor(interfaceSizeField);
+        rootGroup.addActor(interfaceSizeSlider);
+        rootGroup.addActor(interfaceSizeSliderValueLbl);
+
         rootGroup.addActor(fpsBox);
         rootGroup.addActor(versionBox);
         rootGroup.addActor(VBox);
@@ -118,8 +112,15 @@ public class GameMenuField extends MenuObject {
         rootGroup.addActor(debugUiBox);
     }
 
+    @Override
+    public void renderUiElements() {
+        super.renderUiElements();
+
+        interfaceSizeSliderValueLbl.setText("fps: " + interfaceSizeSlider.getValue());
+    }
+
     public void applySettings() {
-        gameConfig.interfaceSize = Float.parseFloat(interfaceSizeField.getText());
+        gameConfig.interfaceSize = interfaceSizeSlider.getValue();
         gameConfig.showFps = fpsBox.isChecked();
         gameConfig.showVersion = versionBox.isChecked();
         gameConfig.showVVectors = VBox.isChecked();
