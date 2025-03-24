@@ -25,7 +25,7 @@ public class SceneLoadingScreen extends ScreenObject {
 
     @Override
     public void renderUiElements() {
-        if (GameScene.loaded)
+        if (GravitySimulation2.getGameScene("game scene").loaded)
             switchToScene();
     }
 

@@ -12,6 +12,9 @@ import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.BackgroundActor;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenu;
+import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.save.SaveConfig;
+import com.gravitysimulation2.screen.scene.SceneScreen;
 
 public class PauseMenu extends InterfaceObject {
     public PauseMenu() {
@@ -52,6 +55,29 @@ public class PauseMenu extends InterfaceObject {
             }
         });
 
+        // restart
+        TextButton restartBtn = createTextButton("Restart", Color.WHITE, relativeButtonFontSize,
+            relativeButtonSizeX, relativeButtonSizeY
+        );
+        curPosY -= relativePad + relativeButtonSizeY;
+        restartBtn.setPosition(startPosX, curPosY);
+        restartBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GravitySimulation2.switchToScreen("loading");
+
+                // get current scene and save config
+                GameScene scene = GravitySimulation2.getGameScene("game scene");
+                SaveConfig saveConfig = scene.saveConfig;
+
+                // loading objects into old scene
+                scene.loaded = false;
+                new Thread(
+                    () -> saveConfig.loadScene(scene)
+                ).start();  // start loading scene in new thread
+            }
+        });
+
         // settings
         TextButton settingsBtn = createTextButton("Settings", Color.WHITE, relativeButtonFontSize,
             relativeButtonSizeX, relativeButtonSizeY
@@ -77,8 +103,8 @@ public class PauseMenu extends InterfaceObject {
         backToMainBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GravitySimulation2.getGameScene("game scene").dispose();
                 hide();
+                GravitySimulation2.getGameScene("game scene").dispose();
                 GravitySimulation2.switchToScreen("main menu");
                 GravitySimulation2.getGameMenu("main").show();
             }
@@ -102,6 +128,7 @@ public class PauseMenu extends InterfaceObject {
         rootGroup.addActor(bgActor);
         rootGroup.addActor(pauseLabel);
         rootGroup.addActor(resumeBtn);
+        rootGroup.addActor(restartBtn);
         rootGroup.addActor(settingsBtn);
         rootGroup.addActor(backToMainBtn);
     }

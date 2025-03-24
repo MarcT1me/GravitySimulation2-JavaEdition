@@ -93,7 +93,7 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        GameScene.loaded = true;
+        scene.loaded = true;
     }
 
     public String getFormattedSaveTime(long time) {

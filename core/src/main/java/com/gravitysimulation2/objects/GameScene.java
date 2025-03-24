@@ -10,17 +10,18 @@ import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.objects.camera.Camera;
 import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.physic.PhysicBody;
+import com.gravitysimulation2.save.SaveConfig;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
 public class GameScene extends InterfaceObject implements IUpdatable, IRenderer, Disposable {
-    public static boolean loaded = false;
-
+    public boolean loaded = false;
     public boolean paused = false;
 
     public String name;
+    public SaveConfig saveConfig;
 
     public final Map<String, GameObject> objects = new HashMap<>();
     public static final Map<String, Float> speeds = new HashMap<>();
@@ -29,8 +30,9 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer,
 
     public ShapeRenderer shapeRenderer;
 
-    public GameScene(String name) {
-        this.name = name;
+    public GameScene(SaveConfig saveConfig) {
+        this.name = saveConfig.name;
+        this.saveConfig = saveConfig;
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -118,8 +120,6 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer,
 
     @Override
     public void dispose() {
-        loaded = false;
-
         // objects
         objects.values().forEach(
             GameObject::dispose
