@@ -1,14 +1,15 @@
-package com.gravitysimulation2.physic;
+package com.gravitysimulation2.objects.physic;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gravitysimulation2.objects.scene.GameScene;
+
+import java.util.stream.Stream;
 
 public class PhysicBody extends Physic {
     // forces
-    private final Vector2 F_total = new Vector2();
-    private final Vector2 F_gravity = new Vector2();
-    private final Vector2 F_tidal = new Vector2();
-    private final Vector2 F_torque = new Vector2();
+    public final Vector2 F_total = new Vector2();
+    public final Vector2 F_gravity = new Vector2();
+    public final Vector2 F_tidal = new Vector2();
+    public final Vector2 F_torque = new Vector2();
 
     public Vector2 pos;  // general position
     public float angle;  // rotation
@@ -61,20 +62,30 @@ public class PhysicBody extends Physic {
     }
 
     // gravity
-    public void updateGravityForce() {
+    public void updateGravityForce(Stream<PhysicBody> objects) {
         F_gravity.setZero();
 
-        GameScene.getCurrent().objects.values()
-            .forEach(obj ->
-                F_gravity.add(calculateGravityForce(this.getPos(), this.getMass(), obj.getPos(), obj.getMass()))
-            );
+        objects
+            .forEach(obj -> {
+                if (obj == this) return; // Игнорируем себя
+                F_gravity.add(
+                    calculateGravityForce(
+                        this.getPos(), this.getMass(),
+                        obj.getPos(), obj.getMass()
+                    )
+                );
+            });
+    }
+
+    public void addGravityForceToTotal() {
+        F_total.add(F_gravity);
     }
 
     // tibal
-    public void updateTidalForce() {
+    public void updateTidalForce(Stream<PhysicBody> objects) {
         F_tidal.setZero();
 
-        GameScene.getCurrent().objects.values().forEach(other -> {
+        objects.forEach(other -> {
             if (this == other)
                 return;
 
@@ -100,10 +111,10 @@ public class PhysicBody extends Physic {
     }
 
     // rotation
-    private void updateRotationForces() {
+    private void updateRotationForces(Stream<PhysicBody> objects) {
         F_torque.setZero();
 
-        GameScene.getCurrent().objects.values().forEach(other -> {
+        objects.forEach(other -> {
             if (this == other) return;
 
             Vector2 r = other.getPos().cpy().sub(this.getPos());
@@ -117,33 +128,20 @@ public class PhysicBody extends Physic {
         return structuralIntegrity <= 0;
     }
 
-    public void updateForces() {
-        F_total.setZero();
-
-        updateGravityForce();
-        F_total.add(F_gravity);
-
-//        updateTidalForce();
-
-//        updateRotationForces();
-    }
-
     public void updateAngularVelocity() {
-        angularVelocity += F_torque.scl(1 / momentOfInertia).len();
+        angularVelocity += F_torque.cpy().scl(1 / momentOfInertia).len();
     }
 
     public void updateAngle(float deltaTime, float simulationSpeed) {
         angle += angularVelocity * deltaTime * simulationSpeed;
     }
 
-    public void updateVelocity(float deltaTime, float simulationSpeed) {
-
-        Vector2 acceleration = F_total.scl(1.0f / mass);
-
-        velocity = velocity.add(acceleration.scl(deltaTime * simulationSpeed));
+    public void updateVelocity(float deltaTime) {
+        Vector2 acceleration = F_total.cpy().scl(1.0f / mass);
+        velocity.add(acceleration.scl(deltaTime));
     }
 
-    public void updatePos(float deltaTime, float simulationSpeed) {
-        pos.add(velocity.scl(deltaTime * simulationSpeed));
+    public void updatePos(float deltaTime) {
+        pos.add(velocity.cpy().scl(deltaTime));
     }
 }

@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.config.Config;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
-import com.gravitysimulation2.objects.Camera;
-import com.gravitysimulation2.objects.scene.GameScene;
+import com.gravitysimulation2.objects.camera.Camera;
+import com.gravitysimulation2.objects.GameScene;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -21,9 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 public class SaveConfig implements Config<SaveConfig>, Disposable {
-    public String name = "untitled";
+    public String name = "default";
     public long lastLoadTime = 0;
     public long createTime = 0;
+    public float simulationSpeed = 1;
 
     public static List<SaveConfig> scanSaves() {
         List<SaveConfig> saves = new LinkedList<>();
@@ -42,7 +41,8 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
                 if (configFile.exists()) {
                     SaveConfig config = ConfigManager.load(
                         SaveConfig.class, saveName,
-                        new Class[]{String.class}, new Object[]{saveName}
+                        new Class[]{String.class}, new Object[]{saveName},
+                        false
                     );
                     saves.add(config);
                 }
@@ -52,8 +52,7 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
         return saves;
     }
 
-    public SaveConfig() {
-    }
+    public SaveConfig() { }
 
     public SaveConfig(String name) {
         this.name = name;
@@ -66,24 +65,28 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
 
     @Override
     public SaveConfig getDefaultConfig() {
-        return new SaveConfig("untitled");
+        return new SaveConfig();
     }
 
     public void loadScene(GameScene scene) {
+        // objects
         Map<String, Object> sceneDataMap = SceneParser.loadSave(
             GameConfig.savesDir + "/" + name + "/scene.json"
         );
-
         for (Map.Entry<String, Object> entry : sceneDataMap.entrySet()) {
-            scene.addObject(SceneParser.createObject(entry));
+            scene.addObject(SceneParser.createObject(scene, entry));
         }
 
+        // camera
         CameraConfig cameraConfig = ConfigManager.load(
-            CameraConfig.class, "scene-camera",
-            ConfigManager.emptyParametersTypes,
-            ConfigManager.emptyParameters
+            CameraConfig.class, "camera",
+            new Class[]{String.class}, new Object[]{name},
+            false
         );
         scene.setCamera(new Camera(new Vector2(cameraConfig.posX, cameraConfig.posY), cameraConfig.zoom));
+
+        // simulation speed
+        GameScene.speeds.put("simulation", simulationSpeed);
 
         try {
             Thread.sleep(1000);
@@ -99,16 +102,10 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public void saveWithCamera() {
-        lastLoadTime = TimeUtils.millis() / 1000;
-        ConfigManager.save(name);
-        ConfigManager.save("scene-camera");
-    }
-
     @Override
     public void dispose() {
-        ConfigManager.unloadConfig(name);
-        if (ConfigManager.getConfig("scene-camera") != null)
-            ConfigManager.unloadConfig("scene-camera");
+//        ConfigManager.unloadConfig(name);
+//        if (ConfigManager.getConfig("camera") != null)
+//            ConfigManager.unloadConfig("camera");
     }
 }

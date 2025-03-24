@@ -1,4 +1,4 @@
-package com.gravitysimulation2.physic;
+package com.gravitysimulation2.objects.physic;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -35,17 +35,17 @@ public class Physic {
         if (primaryPos == satellitePos)
             return new Vector2();
 
-        Vector2 distVec = primaryPos.sub(satellitePos);
+        Vector2 distVec = satellitePos.cpy().sub(primaryPos);
+        float distance = distVec.len();
 
-        float distScl = primaryPos.dst(satellitePos);
+        float epsilon = 1e-5f;
+        if (distance < epsilon) {
+            return new Vector2();
+        }
 
-        float forceMagnitude = (G * primaryMass * satelliteMass) / (distScl * distScl);
-        float forceDir = (float) Math.atan2(distVec.y, distVec.x);
+        float forceMagnitude = (G * primaryMass * satelliteMass) / (distance * distance);
 
-        return new Vector2(
-            forceMagnitude * (float) Math.cos(forceDir),
-            forceMagnitude * (float) Math.sin(forceDir)
-        );
+        return distVec.nor().scl(forceMagnitude);
     }
 
     public static Vector2 calculateRadiationPressureForce(float power, Vector2 direction, float area) {

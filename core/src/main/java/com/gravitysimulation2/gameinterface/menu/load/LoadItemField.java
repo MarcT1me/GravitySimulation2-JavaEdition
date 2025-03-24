@@ -6,13 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gravitysimulation2.GravitySimulation2;
-import com.gravitysimulation2.gameinterface.menu.MenuObject;
-import com.gravitysimulation2.objects.scene.GameScene;
+import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.save.SaveConfig;
+import com.gravitysimulation2.screen.scene.SceneScreen;
 
-import java.time.LocalDateTime;
-
-public class LoadItemField extends MenuObject {
+public class LoadItemField extends InterfaceObject {
     private final SaveConfig saveConfig;
 
     public LoadItemField(SaveConfig saveConfig) {
@@ -39,9 +38,19 @@ public class LoadItemField extends MenuObject {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GravitySimulation2.setGameScreen("loading");
-                GameScene scene = GameScene.createNew(saveConfig.name);
-                new Thread(() -> saveConfig.loadScene(scene)).start();  // start loading scene in new thread
+                // hide menu and show loading screen
+                GravitySimulation2.getGameMenu("load").hide();
+                GravitySimulation2.switchToScreen("loading");
+
+                // create scene and attach to screen
+                GameScene scene = new GameScene(saveConfig.name);
+                GravitySimulation2.setGameScene(scene, "game scene");
+                ((SceneScreen) GravitySimulation2.getGameScreen("game scene")).attachToScene(scene);
+
+                // loading objects into scene
+                new Thread(
+                    () -> saveConfig.loadScene(scene)
+                ).start();  // start loading scene in new thread
             }
         });
         table.add(backButton).size(relativeButtonSizeX, relativeButtonSizeY).center().pad(relativePad);
@@ -70,5 +79,10 @@ public class LoadItemField extends MenuObject {
         Table table = getSaveTable();
         rootGroup.addActor(table);
         rootGroup.setSize(table.getPrefWidth(), table.getPrefHeight());
+    }
+
+    @Override
+    public void renderUiElements() {
+
     }
 }

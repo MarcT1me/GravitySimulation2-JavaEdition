@@ -4,16 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gravitysimulation2.GravitySimulation2;
-import com.gravitysimulation2.gameinterface.menu.MenuBackgroundActor;
-import com.gravitysimulation2.gameinterface.menu.MenuObject;
+import com.gravitysimulation2.gameinterface.BackgroundActor;
+import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenu;
 
-public class MainMenu extends MenuObject {
+public class MainMenu extends InterfaceObject {
+    public MainMenu() {
+        super();
+        hide();
+    }
+
     @Override
     public void setupUI() {
         float screenCenterX = Gdx.graphics.getWidth() / 2f;
@@ -59,7 +66,8 @@ public class MainMenu extends MenuObject {
         loadBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GravitySimulation2.instance.setScreen(GravitySimulation2.instance.menuMap.get("load"));
+                hide();
+                GravitySimulation2.getGameMenu("load").show();
             }
         });
 
@@ -74,7 +82,10 @@ public class MainMenu extends MenuObject {
         settingsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GravitySimulation2.instance.setScreen(GravitySimulation2.instance.menuMap.get("settings"));
+                hide();
+                SettingsMenu settingsMenu = (SettingsMenu) GravitySimulation2.getGameMenu("settings");
+                settingsMenu.setPreviousMenu(MainMenu.this);
+                settingsMenu.show();
             }
         });
 
@@ -97,7 +108,7 @@ public class MainMenu extends MenuObject {
         rootGroup.addActor(gsImg);
 
         // bg (need initialized labels and buttons)
-        MenuBackgroundActor bgActor = new MenuBackgroundActor() {
+        BackgroundActor bgActor = new BackgroundActor() {
             @Override
             public void draw(Batch batch, float parentAlpha) {
                 super.draw(batch, parentAlpha);
@@ -108,7 +119,8 @@ public class MainMenu extends MenuObject {
                     screenCenterY + menuLbl.getHeight() + relativePad * 2,
                     menuLbl.getPrefWidth() * 2 + relativePad * 4,
                     -menuLbl.getHeight() - relativeButtonSizeY * 3f - relativePad * 9f,
-                    Color.DARK_GRAY);
+                    new Vector4(Color.DARK_GRAY.r, Color.DARK_GRAY.g, Color.DARK_GRAY.b, 0.5f)
+                );
 
                 endDraw(batch);
             }
@@ -121,5 +133,10 @@ public class MainMenu extends MenuObject {
 
         rootGroup.addActor(mainLbl);
         rootGroup.addActor(menuLbl);
+    }
+
+    @Override
+    public void renderUiElements() {
+
     }
 }

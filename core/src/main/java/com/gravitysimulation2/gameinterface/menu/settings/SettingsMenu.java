@@ -5,16 +5,26 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gravitysimulation2.GravitySimulation2;
-import com.gravitysimulation2.gameinterface.menu.MenuObject;
+import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.gameinterface.menu.settings.fields.GameMenuField;
 import com.gravitysimulation2.gameinterface.menu.settings.fields.GraphicsMenuField;
-import com.gravitysimulation2.objects.scene.GameScene;
+import com.gravitysimulation2.objects.GameScene;
 
-public class SettingsMenu extends MenuObject {
+public class SettingsMenu extends InterfaceObject {
     GameMenuField gameSettings;
     GraphicsMenuField graphicSettings;
+    private InterfaceObject previousMenu;
 
     int currentField = 0;
+
+    public SettingsMenu() {
+        super();
+        hide();
+    }
+
+    public void setPreviousMenu(InterfaceObject previousMenu) {
+        this.previousMenu = previousMenu;
+    }
 
     @Override
     public void setupUI() {
@@ -139,10 +149,9 @@ public class SettingsMenu extends MenuObject {
             new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (GameScene.loaded) {
-                        GravitySimulation2.setGameScreen("pause");
-                    } else {
-                        GravitySimulation2.setGameScreen("main");
+                    hide();
+                    if (previousMenu != null) {
+                        previousMenu.show();
                     }
                 }
             }
@@ -165,7 +174,6 @@ public class SettingsMenu extends MenuObject {
 
     @Override
     public void renderUiElements() {
-        super.renderUiElements();
         gameSettings.renderUiElements();
         graphicSettings.renderUiElements();
     }

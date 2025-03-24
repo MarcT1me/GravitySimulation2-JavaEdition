@@ -7,18 +7,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gravitysimulation2.GravitySimulation2;
-import com.gravitysimulation2.gameinterface.menu.MenuObject;
+import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.save.SaveConfig;
 
 import java.util.List;
 import java.util.LinkedList;
 
-public class LoadMenu extends MenuObject {
+public class LoadMenu extends InterfaceObject {
     List<LoadItemField> items = new LinkedList<>();
     float itemsPosY;
 
     float screenCenterX;
     float relativePad;
+
+    public LoadMenu() {
+        super();
+        hide();
+    }
 
     @Override
     public void setupUI() {
@@ -38,6 +43,7 @@ public class LoadMenu extends MenuObject {
             Gdx.graphics.getHeight() - loadLbl.getHeight() - relativePad
         );
 
+        items.clear();
         itemsPosY = Gdx.graphics.getHeight() - loadLbl.getHeight();
         for (SaveConfig saveConfig : SaveConfig.scanSaves()) {
             addLoadItem(saveConfig);
@@ -55,7 +61,8 @@ public class LoadMenu extends MenuObject {
             new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    GravitySimulation2.instance.setScreen(GravitySimulation2.instance.menuMap.get("main"));
+                    hide();
+                    GravitySimulation2.getGameMenu("main").show();
                 }
             }
         );
@@ -69,6 +76,11 @@ public class LoadMenu extends MenuObject {
         }
 
         rootGroup.addActor(backButton);
+    }
+
+    @Override
+    public void renderUiElements() {
+
     }
 
     private void addLoadItem(SaveConfig saveConfig) {

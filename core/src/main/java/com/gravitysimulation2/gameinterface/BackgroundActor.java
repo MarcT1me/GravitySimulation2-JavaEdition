@@ -1,14 +1,15 @@
-package com.gravitysimulation2.gameinterface.menu;
+package com.gravitysimulation2.gameinterface;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 
-public class MenuBackgroundActor extends Actor implements Disposable {
+public class BackgroundActor extends Actor implements Disposable {
     private final ShapeRenderer shapeRenderer;
 
     protected void drawRect(float x, float y, float width, float height, Color color) {
@@ -42,14 +43,15 @@ public class MenuBackgroundActor extends Actor implements Disposable {
         shapeRenderer.setColor(color.x, color.y, color.z, color.w);
     }
 
-    protected MenuBackgroundActor() {
+    protected BackgroundActor() {
         shapeRenderer = new ShapeRenderer();
-        setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     protected void beginDraw(Batch batch) {
         batch.end();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     protected void endDraw(Batch batch) {

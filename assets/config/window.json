@@ -1,4 +1,4 @@
 {
-"targetFPS": 75,
-"selectedMonitor": 1
+"fullscreen": false,
+"vsync": false
 }

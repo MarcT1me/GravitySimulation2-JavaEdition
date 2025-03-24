@@ -32,7 +32,9 @@ public class ConfigManager {
     // loading config with name into class
     public static <T extends Config<T>> T load(
         Class<T> configClass, String name,
-        Class<?>[] parametersTypes, Object[] parameters) {
+        Class<?>[] parametersTypes, Object[] parameters,
+        boolean saveInMap
+    ) {
         T resultConfig;
 
         try {
@@ -42,17 +44,20 @@ public class ConfigManager {
 
             if (configFile.exists()) {
                 resultConfig = new Json().fromJson(configClass, configFile);
-                configs.put(name, resultConfig);
+                if (saveInMap)
+                    configs.put(name, resultConfig);
             } else {
                 resultConfig = instance.getDefaultConfig();
-                configs.put(name, resultConfig);
+                if (saveInMap)
+                    configs.put(name, resultConfig);
                 save(name);
             }
         } catch (Exception e) {
             Gdx.app.error("ConfigManager", "Failed to load config. Using defaults.", e);
             try {
                 resultConfig = configClass.getDeclaredConstructor().newInstance().getDefaultConfig();
-                configs.put(name, resultConfig);
+                if (saveInMap)
+                    configs.put(name, resultConfig);
             } catch (Exception ex) {
                 throw new RuntimeException("Failed to create default config", ex);
             }

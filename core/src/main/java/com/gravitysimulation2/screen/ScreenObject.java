@@ -1,4 +1,4 @@
-package com.gravitysimulation2.gameinterface.menu;
+package com.gravitysimulation2.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -7,14 +7,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 
-import com.gravitysimulation2.config.GameConfig;
-
-public abstract class MenuObject extends InterfaceObject implements Screen {
+public abstract class ScreenObject extends InterfaceObject implements Screen {
     // menu screen stage
     protected ScreenViewport viewport;
     public Stage stage;
 
-    protected MenuObject() {
+    protected ScreenObject() {
         viewport = new ScreenViewport();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
@@ -29,36 +27,12 @@ public abstract class MenuObject extends InterfaceObject implements Screen {
         }
     }
 
-    public MenuObject updateRootGroup() {
-        rootGroup.clear();
-        setupUI();
-        rootGroup.setPosition(0, 0);
-        if (GameConfig.isDebugUi) rootGroup.debugAll();
-        return this;
-    }
-
     @Override
     public void pause() {
     }
 
     @Override
     public void resume() {
-
-    }
-
-    @Override
-    public void renderUiElements() {
-
-    }
-
-    @Override
-    public void show() {
-        rootGroup.setVisible(true);
-    }
-
-    @Override
-    public void hide() {
-        rootGroup.setVisible(false);
     }
 
     @Override

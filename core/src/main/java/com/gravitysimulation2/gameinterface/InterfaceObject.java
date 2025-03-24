@@ -70,4 +70,20 @@ public abstract class InterfaceObject {
     public abstract void setupUI();
 
     public abstract void renderUiElements();
+
+    public InterfaceObject updateRootGroup() {
+        rootGroup.clear();
+        setupUI();
+        rootGroup.setPosition(0, 0);
+        if (GameConfig.isDebugUi) rootGroup.debugAll();
+        return this;
+    }
+
+    public void show() {
+        rootGroup.setVisible(true);
+    }
+
+    public void hide() {
+        rootGroup.setVisible(false);
+    }
 }

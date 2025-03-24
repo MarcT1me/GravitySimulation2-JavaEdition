@@ -1,0 +1,38 @@
+{
+  "obj1": {
+    "pos": [0.0, 100.0],
+    "vel": [-17.32, 0.0],
+
+    "angle": 0.0,
+    "mass": 1e15,
+    "density": 1000.0,
+    "radius": 15.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.0, 255.0, 0.0]}
+  },
+  "obj2": {
+    "pos": [-86.6, -50.0],
+    "vel": [8.66, 15.0],
+
+    "angle": 0.0,
+    "mass": 1e15,
+    "density": 1000.0,
+    "radius": 15.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [255.0, 0.0, 0.0]}
+  },
+  "obj3": {
+    "pos": [86.6, -50.0],
+    "vel": [8.66, -15.0],
+
+    "angle": 0.0,
+    "mass": 1e15,
+    "density": 1000.0,
+    "radius": 15.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [9.0, 0.0, 255.0]}
+  }
+}

@@ -1,13 +1,13 @@
-package com.gravitysimulation2.gameinterface;
+package com.gravitysimulation2.screen.loading;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.gravitysimulation2.GravitySimulation2;
-import com.gravitysimulation2.gameinterface.menu.MenuObject;
-import com.gravitysimulation2.objects.scene.GameScene;
+import com.gravitysimulation2.screen.ScreenObject;
+import com.gravitysimulation2.objects.GameScene;
 
-public class LoadingScreen extends MenuObject {
+public class SceneLoadingScreen extends ScreenObject {
     @Override
     public void setupUI() {
         float screenCenterX = Gdx.graphics.getWidth() / 2f;
@@ -25,12 +25,11 @@ public class LoadingScreen extends MenuObject {
 
     @Override
     public void renderUiElements() {
-        super.renderUiElements();
         if (GameScene.loaded)
             switchToScene();
     }
 
     private static void switchToScene() {
-        GravitySimulation2.setGameScreen("scene");
+        GravitySimulation2.switchToScreen("game scene");
     }
 }

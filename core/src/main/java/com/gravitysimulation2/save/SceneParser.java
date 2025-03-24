@@ -6,7 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gravitysimulation2.objects.GameObject;
+import com.gravitysimulation2.objects.object.GameObject;
+import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.objects.object.objectypes.ObjectTypes;
+import com.gravitysimulation2.objects.physic.PhysicBody;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,49 +17,50 @@ import java.util.List;
 import java.util.Map;
 
 public class SceneParser {
-    public static GameObject createObject(Map.Entry<String, Object> entry) {
-        String objectName = entry.getKey();
-        Map<String, Object> objectData = (Map<String, Object>) entry.getValue();
-
-        List<Number> posList = (List<Number>) objectData.get("pos");
-        Vector2 pos = new Vector2(
-            posList.get(0).floatValue(),
-            posList.get(1).floatValue()
-        );
-
-        List<Number> velocityList = (List<Number>) objectData.get("vel");
-        Vector2 velocity = new Vector2(
-            velocityList.get(0).floatValue(),
-            velocityList.get(1).floatValue()
-        );
-
-        float angle = ((Number) objectData.get("angle")).floatValue();
-        float mass = ((Number) objectData.get("mass")).floatValue();
-        float density = ((Number) objectData.get("density")).floatValue();
-        float radius = ((Number) objectData.get("radius")).floatValue();
-        float angularVelocity = ((Number) objectData.get("angularVelocity")).floatValue();
-
-        Map<String, Object> objectOtherData = (Map<String, Object>) objectData.get("objectData");
-        String objectTypeName = (String) objectOtherData.get("type");
-        List<Long> colorList = (List<Long>) objectOtherData.get("color");
-        Vector3 color = new Vector3(
-            colorList.get(0),
-            colorList.get(1),
-            colorList.get(2)
-        );
-
-        return new GameObject(objectName,
-            pos, angle,
-            mass, density, radius,
-            velocity, angularVelocity
-        );
-    }
-
     public static Map<String, Object> loadSave(String filePath) {
         FileHandle file = Gdx.files.internal(filePath); // Для файлов в папке assets
         JsonReader reader = new JsonReader();
         JsonValue root = reader.parse(file);
         return (Map<String, Object>) parseJson(root);
+    }
+
+    public static GameObject createObject(GameScene scene, Map.Entry<String, Object> entry) {
+        String gameObjectName = entry.getKey();
+        Map<String, Object> gameObjectData = (Map<String, Object>) entry.getValue();
+
+        Vector2 pos = parseVector2(gameObjectData.get("pos"));
+        Vector2 velocity = parseVector2(gameObjectData.get("vel"));
+        float angle = ((Number) gameObjectData.get("angle")).floatValue();
+        float mass = ((Number) gameObjectData.get("mass")).floatValue();
+        float density = ((Number) gameObjectData.get("density")).floatValue();
+        float radius = ((Number) gameObjectData.get("radius")).floatValue();
+        float angularVelocity = ((Number) gameObjectData.get("angularVelocity")).floatValue();
+
+        // object data
+        Map<String, Object> objectData = (Map<String, Object>) gameObjectData.get("objectData");
+        String objectTypeName = (String) objectData.get("type");
+
+        return new GameObject(
+            scene,
+            gameObjectName,
+            new PhysicBody(
+                pos, angle,
+                mass, density, radius,
+                velocity, angularVelocity
+            ),
+            Enum.valueOf(ObjectTypes.class, objectTypeName),
+            objectData
+        );
+    }
+
+    public static Vector3 parseVector3(Object value) {
+        ArrayList<Double> array = (ArrayList<Double>) value;
+        return new Vector3(array.get(0).floatValue(), array.get(1).floatValue(), array.get(2).floatValue());
+    }
+
+    public static Vector2 parseVector2(Object value) {
+        ArrayList<Double> array = (ArrayList<Double>) value;
+        return new Vector2(array.get(0).floatValue(), array.get(1).floatValue());
     }
 
     private static Object parseJson(JsonValue jsonValue) {
@@ -78,7 +82,6 @@ public class SceneParser {
             return list;
         } else {
             if (jsonValue.isBoolean()) return jsonValue.asBoolean();
-            else if (jsonValue.isLong()) return jsonValue.asLong();
             else if (jsonValue.isDouble()) return jsonValue.asDouble();
             else if (jsonValue.isString()) return jsonValue.asString();
             else return null;

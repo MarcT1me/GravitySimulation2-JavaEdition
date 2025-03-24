@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
-import com.gravitysimulation2.gameinterface.menu.MenuObject;
+import com.gravitysimulation2.gameinterface.InterfaceObject;
 
-public class GameMenuField extends MenuObject {
+public class GameMenuField extends InterfaceObject {
     public float categoryStartX;
     GameConfig gameConfig;
 
@@ -24,6 +24,7 @@ public class GameMenuField extends MenuObject {
     CheckBox debugUiBox;
 
     public GameMenuField(float categoryStartX) {
+        super();
         this.categoryStartX = categoryStartX;
         gameConfig = (GameConfig) ConfigManager.getConfig("game config");
     }
@@ -41,7 +42,7 @@ public class GameMenuField extends MenuObject {
         curPosY -= relativePad + interfaceSizeLbl.getHeight();
         interfaceSizeLbl.setPosition(startPosX + relativePad, curPosY);
 
-        interfaceSizeSlider = createSlider(0.5f, 1.5f, 0.1f, false, Color.GRAY);
+        interfaceSizeSlider = createSlider(0.35f, 1.25f, 0.01f, false, Color.GRAY);
         interfaceSizeSlider.setValue(gameConfig.interfaceSize);
         interfaceSizeSlider.setPosition(
             categoryStartX + interfaceSizeLbl.getWidth() + relativePad * 3,
@@ -114,9 +115,7 @@ public class GameMenuField extends MenuObject {
 
     @Override
     public void renderUiElements() {
-        super.renderUiElements();
-
-        interfaceSizeSliderValueLbl.setText("fps: " + interfaceSizeSlider.getValue());
+        interfaceSizeSliderValueLbl.setText("interface size: " + interfaceSizeSlider.getValue());
     }
 
     public void applySettings() {

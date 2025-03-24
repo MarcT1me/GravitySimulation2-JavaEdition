@@ -1,12 +1,12 @@
 {
   "Sun": {
-    "pos": [0, 0],
-    "angle": 0,
-    "mass": 1,
-    "density": 0,
-    "radius": 1,
-    "vel": [0, 0],
-    "angularVelocity": 0,
-    "objectData": {"type": "STAR", "color": [255, 255, 255], "force": 0.0}
+    "pos": [0.0, 0.0],
+    "angle": 0.0,
+    "mass": 1.0,
+    "density": 0.0,
+    "radius": 1.0,
+    "vel": [0.0, 0.0],
+    "angularVelocity": 0.0,
+    "objectData": {"type": "STAR", "color": [255.0, 255.0, 255.0], "force": 0.0}
   }
 }

@@ -7,11 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.WindowConfig;
-import com.gravitysimulation2.gameinterface.menu.MenuObject;
+import com.gravitysimulation2.gameinterface.InterfaceObject;
 
 import java.util.LinkedList;
 
-public class GraphicsMenuField extends MenuObject {
+public class GraphicsMenuField extends InterfaceObject {
     public float categoryStartX;
     WindowConfig windowConfig;
 
@@ -25,6 +25,7 @@ public class GraphicsMenuField extends MenuObject {
     Label fpsSliderValueLbl;
 
     public GraphicsMenuField(float categoryStartX) {
+        super();
         this.categoryStartX = categoryStartX;
         windowConfig = (WindowConfig) ConfigManager.getConfig("window config");
     }
@@ -137,7 +138,6 @@ public class GraphicsMenuField extends MenuObject {
 
     @Override
     public void renderUiElements() {
-        super.renderUiElements();
         monitorSelect.setDisabled(!fullscreenBox.isChecked());
         resolutionSelect.setDisabled(fullscreenBox.isChecked());
 
@@ -200,16 +200,16 @@ public class GraphicsMenuField extends MenuObject {
             windowConfig.targetFPS = 60;
         }
 
-        applyGraphicsSettings();
+        applyGraphicsConfig();
     }
 
     public void resetSettings() {
         windowConfig = windowConfig.getDefaultConfig();
         ConfigManager.addConfig("window config", windowConfig);
-        applyGraphicsSettings();
+        applyGraphicsConfig();
     }
 
-    private void applyGraphicsSettings() {
+    private void applyGraphicsConfig() {
         windowConfig.apply();
         ConfigManager.save("window config");
     }
