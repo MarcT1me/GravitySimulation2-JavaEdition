@@ -9,11 +9,8 @@ import com.gravitysimulation2.save.SceneParser;
 import java.util.Map;
 
 public class SatelliteObject extends ObjectType {
-    protected Vector3 color;
-
     public SatelliteObject(GameObject sourceObject, Map<String, Object> objectData) {
         super(sourceObject, objectData);
-        this.color = SceneParser.parseVector3(objectData.get("color"));
     }
 
     @Override

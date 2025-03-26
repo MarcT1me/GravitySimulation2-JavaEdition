@@ -115,7 +115,7 @@ public class GameMenuField extends InterfaceObject {
 
     @Override
     public void renderUiElements() {
-        interfaceSizeSliderValueLbl.setText("interface size: " + interfaceSizeSlider.getValue());
+        interfaceSizeSliderValueLbl.setText(String.format("interface size: %.2f", interfaceSizeSlider.getValue()));
     }
 
     public void applySettings() {
