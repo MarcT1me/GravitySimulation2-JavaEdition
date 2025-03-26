@@ -122,4 +122,8 @@ public class GraphicSettingsField extends SettingsMenuField {
     public void applyConfig() {
         ConfigManager.save("graphic config");
     }
+
+    @Override
+    public void dispose() {
+    }
 }

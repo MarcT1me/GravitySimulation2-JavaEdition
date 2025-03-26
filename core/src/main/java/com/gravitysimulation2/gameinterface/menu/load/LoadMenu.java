@@ -92,4 +92,9 @@ public class LoadMenu extends MenuObject {
     private LoadItemField createLoadItem(SaveConfig saveConfig) {
         return (LoadItemField) new LoadItemField(saveConfig).updateRootGroup();
     }
+
+    @Override
+    public void dispose() {
+        items.forEach(LoadItemField::dispose);
+    }
 }

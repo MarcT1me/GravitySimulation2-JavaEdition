@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
-import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
 import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenuField;
@@ -110,5 +109,9 @@ public class GameSettingsField extends SettingsMenuField {
 
     public void applyConfig() {
         ConfigManager.save("game config");
+    }
+
+    @Override
+    public void dispose() {
     }
 }

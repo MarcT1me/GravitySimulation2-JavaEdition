@@ -4,11 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Disposable;
 
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
 
-public abstract class InterfaceObject {
+public abstract class InterfaceObject implements Disposable {
     // global ui skin
     public static Skin skin;
 
@@ -16,6 +17,10 @@ public abstract class InterfaceObject {
 
     public static void loadUiSkin() {
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+    }
+
+    public static void disposeSkin() {
+        skin.dispose();
     }
 
     public static Label createLabel(String text, Color color, float fontSize) {

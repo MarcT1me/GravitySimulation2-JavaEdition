@@ -218,4 +218,8 @@ public class SettingsMenu extends MenuObject {
         super.show();
         currentField = NOT_CHOSEN_SETTINGS_FIELD;
     }
+
+    @Override
+    public void dispose() {
+    }
 }

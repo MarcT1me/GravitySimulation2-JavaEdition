@@ -20,7 +20,7 @@ public class Camera {
     }
 
     public void move(Vector2 offset) {
-        pos.add(offset);
+        pos.add(offset.cpy().scl(zoom));
     }
 
     public void zoom(float offset) {

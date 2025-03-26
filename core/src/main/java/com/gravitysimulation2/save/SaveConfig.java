@@ -105,8 +105,6 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
 
     @Override
     public void dispose() {
-//        ConfigManager.unloadConfig(name);
-//        if (ConfigManager.getConfig("camera") != null)
-//            ConfigManager.unloadConfig("camera");
+        ConfigManager.unloadConfig(name);
     }
 }

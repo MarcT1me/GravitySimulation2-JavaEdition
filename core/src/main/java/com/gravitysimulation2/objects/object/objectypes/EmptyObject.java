@@ -35,6 +35,11 @@ public class EmptyObject extends ObjectType {
     }
 
     @Override
+    public void preRender() {
+
+    }
+
+    @Override
     public void render() {
 
     }

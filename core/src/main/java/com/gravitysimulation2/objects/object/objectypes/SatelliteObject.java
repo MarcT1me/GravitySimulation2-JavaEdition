@@ -1,7 +1,6 @@
 package com.gravitysimulation2.objects.object.objectypes;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 
 import com.gravitysimulation2.objects.object.GameObject;
 
@@ -24,6 +23,11 @@ public class SatelliteObject extends ObjectType {
 
     @Override
     public void update(float deltaTime) {
+
+    }
+
+    @Override
+    public void preRender() {
 
     }
 

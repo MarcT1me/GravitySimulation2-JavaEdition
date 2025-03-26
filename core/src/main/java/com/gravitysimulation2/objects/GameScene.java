@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class GameScene extends InterfaceObject implements IUpdatable, IRenderer, Disposable {
+public class GameScene extends InterfaceObject implements IUpdatable, IRenderer {
     public boolean loaded = false;
     public boolean paused = false;
 
@@ -102,12 +102,15 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer,
     }
 
     @Override
+    public void preRender() {
+        objects.values().forEach(GameObject::preRender);
+    }
+
+    @Override
     public void render() {
         objects.values().forEach(
             GameObject::render
         );
-
-        shapeRenderer.flush();
     }
 
     @Override

@@ -37,12 +37,6 @@ public class MainMenuScreen extends ScreenObject {
 
     @Override
     public void render(float delta) {
-        if (scene != null) {
-            scene.preUpdate(delta);
-            scene.update(delta);
-            scene.render();
-            scene.renderUiElements();
-        }
         super.render(delta);
     }
 }

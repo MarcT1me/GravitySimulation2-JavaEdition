@@ -3,6 +3,7 @@ package com.gravitysimulation2;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import com.gravitysimulation2.config.*;
@@ -55,6 +56,11 @@ public class GravitySimulation2 extends Game {
         return sceneMap.get(sceneName);
     }
 
+    public static GameScene popGameScene(String sceneName) {
+        return sceneMap.remove(sceneName);
+    }
+
+    // game
     public GravitySimulation2() {
         instance = this;
     }
@@ -118,5 +124,13 @@ public class GravitySimulation2 extends Game {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         super.render();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        screenMap.values().forEach(Disposable::dispose);
+        menuMap.values().forEach(Disposable::dispose);
+        sceneMap.values().forEach(Disposable::dispose);
     }
 }

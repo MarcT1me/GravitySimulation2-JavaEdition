@@ -87,4 +87,9 @@ public class LoadItemField extends InterfaceObject {
     public void renderUiElements() {
 
     }
+
+    @Override
+    public void dispose() {
+        saveConfig.dispose();
+    }
 }

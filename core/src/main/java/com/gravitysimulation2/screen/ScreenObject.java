@@ -15,12 +15,14 @@ public abstract class ScreenObject extends InterfaceObject implements Screen {
 
     // scene
     protected GameScene scene;
+    DefaultBackground background;
 
     protected ScreenObject() {
         viewport = new ScreenViewport();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
         stage.addActor(rootGroup);
+        background = new DefaultBackground();
     }
 
     public void attachToScene(GameScene scene) {
@@ -37,6 +39,7 @@ public abstract class ScreenObject extends InterfaceObject implements Screen {
     public void resize(int width, int height) {
         if (width != 0) {
             viewport.update(width, height, true);
+            background.resize(viewport);
             updateRootGroup();
         }
     }
@@ -49,8 +52,21 @@ public abstract class ScreenObject extends InterfaceObject implements Screen {
     public void resume() {
     }
 
+    public void preRender() {
+        background.preRender();
+    }
+
     @Override
     public void render(float delta) {
+        preRender();
+        if (scene != null) {
+            scene.preUpdate(delta);
+            scene.update(delta);
+            scene.preRender();
+            scene.render();
+            scene.renderUiElements();
+        }
+
         renderUiElements();
         stage.act(delta);
         stage.draw();
@@ -59,6 +75,5 @@ public abstract class ScreenObject extends InterfaceObject implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
 }

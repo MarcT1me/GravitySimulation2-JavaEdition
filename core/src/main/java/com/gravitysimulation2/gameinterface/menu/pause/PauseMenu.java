@@ -99,7 +99,7 @@ public class PauseMenu extends MenuObject {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 hide();
-                GravitySimulation2.getGameScene("game scene").dispose();
+                GravitySimulation2.popGameScene("game scene").dispose();
                 GravitySimulation2.switchToScreen("main menu");
                 GravitySimulation2.getGameMenu("main").show();
             }
@@ -137,5 +137,9 @@ public class PauseMenu extends MenuObject {
     @Override
     public void renderUiElements() {
 
+    }
+
+    @Override
+    public void dispose() {
     }
 }

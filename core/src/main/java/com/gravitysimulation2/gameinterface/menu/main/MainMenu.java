@@ -16,6 +16,8 @@ import com.gravitysimulation2.gameinterface.menu.MenuObject;
 import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenu;
 
 public class MainMenu extends MenuObject {
+    Texture gsTexture;
+
     @Override
     public void setupUI() {
         float screenCenterX = Gdx.graphics.getWidth() / 2f;
@@ -34,7 +36,7 @@ public class MainMenu extends MenuObject {
         /* ico */
         float relativeGsImgRes = getRelativeScreenHeightScalar(128f);
 
-        Texture gsTexture = new Texture(Gdx.files.internal("GS2ico32.png"));
+        gsTexture = new Texture(Gdx.files.internal("GS2ico32.png"));
         Image gsImg = new Image(gsTexture);
 
         gsImg.setSize(relativeGsImgRes, relativeGsImgRes);
@@ -133,5 +135,10 @@ public class MainMenu extends MenuObject {
     @Override
     public void renderUiElements() {
 
+    }
+
+    @Override
+    public void dispose() {
+        gsTexture.dispose();
     }
 }

@@ -60,6 +60,11 @@ public class GameObject implements IUpdatable, IRenderer, Disposable {
     }
 
     @Override
+    public void preRender() {
+        objectType.preRender();
+    }
+
+    @Override
     public void render() {
         objectType.render();
     }

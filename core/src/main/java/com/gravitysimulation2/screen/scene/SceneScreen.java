@@ -43,14 +43,6 @@ public class SceneScreen extends ScreenObject {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             menu.show();
         }
-
-        if (scene != null) {
-            scene.preUpdate(delta);
-            scene.update(delta);
-            scene.render();
-            scene.renderUiElements();
-        }
-
         super.render(delta);
     }
 }

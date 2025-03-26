@@ -212,4 +212,8 @@ public class WindowSettingsField extends SettingsMenuField {
         windowConfig.apply();
         ConfigManager.save("window config");
     }
+
+    @Override
+    public void dispose() {
+    }
 }

@@ -27,6 +27,11 @@ public class PlanetObject extends ObjectType {
     }
 
     @Override
+    public void preRender() {
+
+    }
+
+    @Override
     public void render() {
         super.render();
 
