@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.ScreenUtils;
+
 import com.gravitysimulation2.config.*;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.screen.loading.SceneLoadingScreen;
@@ -26,6 +27,7 @@ public class GravitySimulation2 extends Game {
     public static Map<String, ScreenObject> screenMap = new HashMap<>();
     public static Map<String, GameScene> sceneMap = new HashMap<>();
 
+    // screen
     public static void switchToScreen(String name) {
         ScreenObject screen = screenMap.get(name);
         instance.setScreen(screen);
@@ -35,10 +37,16 @@ public class GravitySimulation2 extends Game {
         return screenMap.get(name);
     }
 
+    public static ScreenObject getCurrentGameScreen() {
+        return instance.getScreen();
+    }
+
+    // menu
     public static InterfaceObject getGameMenu(String name) {
         return menuMap.get(name);
     }
 
+    // scene
     public static void setGameScene(GameScene scene, String sceneName) {
         sceneMap.put(sceneName, scene);
     }
@@ -65,6 +73,11 @@ public class GravitySimulation2 extends Game {
             ConfigManager.emptyParametersTypes,
             ConfigManager.emptyParameters,
             true);
+        ConfigManager.load(
+            GraphicConfig.class, "graphic config",
+            ConfigManager.emptyParametersTypes,
+            ConfigManager.emptyParameters,
+            true);
         InterfaceObject.loadUiSkin();
         // menu
         initAllMenu();
@@ -79,6 +92,10 @@ public class GravitySimulation2 extends Game {
             screen.show();
             Gdx.input.setInputProcessor(screen.stage);
         }
+    }
+
+    public ScreenObject getScreen() {
+        return (ScreenObject) super.getScreen();
     }
 
     private void initAllMenu() {

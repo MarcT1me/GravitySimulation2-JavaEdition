@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.objects.camera.Camera;
 import com.gravitysimulation2.objects.object.GameObject;
@@ -48,13 +48,19 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer,
         objects.remove(object.name);
     }
 
+    public void applyConfigs() {
+        objects.values().forEach(
+            object -> object.objectType.applyConfigs()
+        );
+    }
+
     public Stream<PhysicBody> getPhysicBodyStream() {
         return objects.values().stream().map(gameObject -> gameObject.physicBody);
     }
 
     @Override
     public void preUpdate(float deltaTime) {
-        if (!paused){
+        if (!paused) {
             objects.values().forEach(
                 gameObject -> gameObject.preUpdate(deltaTime)
             );

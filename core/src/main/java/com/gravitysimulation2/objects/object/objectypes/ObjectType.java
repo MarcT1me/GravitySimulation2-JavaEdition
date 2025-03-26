@@ -5,6 +5,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+
+import com.gravitysimulation2.FixedVector2Queue;
+import com.gravitysimulation2.SimpleConditionalTimer;
+import com.gravitysimulation2.config.ConfigManager;
+import com.gravitysimulation2.config.GraphicConfig;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.IRenderer;
@@ -12,38 +17,6 @@ import com.gravitysimulation2.objects.IUpdatable;
 import com.gravitysimulation2.save.SceneParser;
 
 import java.util.Map;
-import java.util.ArrayDeque;
-import java.util.Queue;
-
-class FixedVector2Queue {
-    private final Queue<Vector2> queue;
-    private int maxSize;
-
-    public FixedVector2Queue(int fixedSize) {
-        this.maxSize = fixedSize;
-        this.queue = new ArrayDeque<>(fixedSize);
-    }
-
-    public void setMaxSize(int fixedSize) {
-        this.maxSize = fixedSize;
-    }
-
-    public void add(Vector2 element) {
-        Vector2 copy = new Vector2(element); // Создаем копию, чтобы избежать изменений
-        if (queue.size() >= maxSize) {
-            queue.poll(); // Удаляем головной элемент
-        }
-        queue.offer(copy); // Добавляем в конец
-    }
-
-    public Iterable<Vector2> getElements() {
-        return queue;
-    }
-
-    public void clear() {
-        queue.clear();
-    }
-}
 
 public abstract class ObjectType extends InterfaceObject implements IUpdatable, IRenderer, Disposable {
     public GameObject sourceObject;
@@ -51,15 +24,27 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     public Vector2 screenPos;
     public Vector3 color;
 
-    protected ShapeRenderer shapeRenderer;
-    protected FixedVector2Queue trajectory = new FixedVector2Queue(200);
+    protected final ShapeRenderer shapeRenderer;
+    protected final FixedVector2Queue trajectoryQueue;
+    protected final SimpleConditionalTimer trajectoryTimer;
 
     public ObjectType(GameObject sourceObject, Map<String, Object> objectData) {
         this.sourceObject = sourceObject;
         this.objectData = objectData;
+        this.color = SceneParser.parseVector3(objectData.get("color"));
 
         this.shapeRenderer = sourceObject.scene.shapeRenderer;
-        this.color = SceneParser.parseVector3(objectData.get("color"));
+        this.trajectoryQueue = new FixedVector2Queue();
+        this.trajectoryTimer = new SimpleConditionalTimer();
+
+        applyConfigs();
+    }
+
+    public void applyConfigs() {
+        GraphicConfig config = (GraphicConfig) ConfigManager.getConfig("graphic config");
+
+        this.trajectoryQueue.setMaxSize(config.trajectoryLen);
+        this.trajectoryTimer.setIntervalLength(config.trajectoryInterval);
     }
 
     public Vector2 fromWorldToScreenPosition(Vector2 vec) {
@@ -72,7 +57,10 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
 
     @Override
     public void update(float deltaTime) {
-        trajectory.add(sourceObject.physicBody.pos);
+        if (trajectoryTimer.update(deltaTime)) {
+            trajectoryQueue.add(sourceObject.physicBody.pos);
+            trajectoryTimer.restore();
+        }
     }
 
     @Override
@@ -95,7 +83,7 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
 
         // render orbits
         Vector2 prev = null;
-        for (Vector2 point : trajectory.getElements()) {
+        for (Vector2 point : trajectoryQueue.getElements()) {
             point = fromWorldToScreenPosition(point);
             if (prev != null) {
                 shapeRenderer.line(prev, point);
@@ -109,6 +97,6 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
 
     @Override
     public void dispose() {
-        trajectory.clear();
+        trajectoryQueue.clear();
     }
 }

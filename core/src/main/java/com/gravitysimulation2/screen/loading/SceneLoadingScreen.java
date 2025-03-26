@@ -3,9 +3,9 @@ package com.gravitysimulation2.screen.loading;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
 import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.screen.ScreenObject;
-import com.gravitysimulation2.objects.GameScene;
 
 public class SceneLoadingScreen extends ScreenObject {
     @Override

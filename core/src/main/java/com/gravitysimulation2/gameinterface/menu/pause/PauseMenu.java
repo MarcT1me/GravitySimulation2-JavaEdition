@@ -8,20 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.BackgroundActor;
-import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.gameinterface.menu.MenuObject;
 import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenu;
 import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.save.SaveConfig;
-import com.gravitysimulation2.screen.scene.SceneScreen;
 
-public class PauseMenu extends InterfaceObject {
-    public PauseMenu() {
-        super();
-        hide();
-    }
-
+public class PauseMenu extends MenuObject {
     @Override
     public void setupUI() {
         float relativePad = getRelativeScreenHeightScalar(10f);

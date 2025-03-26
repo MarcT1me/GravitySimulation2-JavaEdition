@@ -5,10 +5,8 @@ import com.gravitysimulation2.gameinterface.menu.load.LoadMenu;
 import com.gravitysimulation2.gameinterface.menu.main.MainMenu;
 import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenu;
 import com.gravitysimulation2.screen.ScreenObject;
-import com.gravitysimulation2.objects.GameScene;
 
 public class MainMenuScreen extends ScreenObject {
-    private GameScene scene;
     final MainMenu menu;
     final LoadMenu loadMenu;
     final SettingsMenu settingsMenu;
@@ -17,10 +15,6 @@ public class MainMenuScreen extends ScreenObject {
         menu = (MainMenu) GravitySimulation2.getGameMenu("main");
         loadMenu = (LoadMenu) GravitySimulation2.getGameMenu("load");
         settingsMenu = (SettingsMenu) GravitySimulation2.getGameMenu("settings");
-    }
-
-    public void attachToScene(GameScene scene) {
-        this.scene = scene;
     }
 
     @Override

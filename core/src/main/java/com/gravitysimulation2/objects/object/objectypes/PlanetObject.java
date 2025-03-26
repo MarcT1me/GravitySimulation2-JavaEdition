@@ -1,12 +1,8 @@
 package com.gravitysimulation2.objects.object.objectypes;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+
 import com.gravitysimulation2.objects.object.GameObject;
-import com.gravitysimulation2.save.SceneParser;
 
 import java.util.Map;
 

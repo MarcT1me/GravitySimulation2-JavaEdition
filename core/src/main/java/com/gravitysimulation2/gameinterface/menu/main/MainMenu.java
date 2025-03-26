@@ -12,15 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.BackgroundActor;
-import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.gameinterface.menu.MenuObject;
 import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenu;
 
-public class MainMenu extends InterfaceObject {
-    public MainMenu() {
-        super();
-        hide();
-    }
-
+public class MainMenu extends MenuObject {
     @Override
     public void setupUI() {
         float screenCenterX = Gdx.graphics.getWidth() / 2f;

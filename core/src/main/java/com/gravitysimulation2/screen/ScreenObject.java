@@ -6,17 +6,31 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.objects.GameScene;
 
 public abstract class ScreenObject extends InterfaceObject implements Screen {
-    // menu screen stage
+    // screen stage
     protected ScreenViewport viewport;
     public Stage stage;
+
+    // scene
+    protected GameScene scene;
 
     protected ScreenObject() {
         viewport = new ScreenViewport();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport);
         stage.addActor(rootGroup);
+    }
+
+    public void attachToScene(GameScene scene) {
+        this.scene = scene;
+    }
+
+    public void applyConfigs() {
+        if (scene != null) {
+            scene.applyConfigs();
+        }
     }
 
     @Override

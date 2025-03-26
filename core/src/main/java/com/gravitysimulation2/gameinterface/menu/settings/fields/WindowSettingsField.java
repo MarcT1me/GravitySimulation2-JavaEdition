@@ -5,28 +5,26 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
+
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.WindowConfig;
-import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenuField;
 
 import java.util.LinkedList;
 
-public class GraphicsMenuField extends InterfaceObject {
-    public float categoryStartX;
+public class WindowSettingsField extends SettingsMenuField {
     WindowConfig windowConfig;
 
     CheckBox fullscreenBox;
     java.util.List<String> monitorsNames;
     SelectBox<String> monitorSelect;
     SelectBox<String> resolutionSelect;
-
     CheckBox VSyncBox;
     Slider fpsSlider;
     Label fpsSliderValueLbl;
 
-    public GraphicsMenuField(float categoryStartX) {
-        super();
-        this.categoryStartX = categoryStartX;
+    public WindowSettingsField(float categoryStartX) {
+        super(categoryStartX);
         windowConfig = (WindowConfig) ConfigManager.getConfig("window config");
     }
 
@@ -200,16 +198,17 @@ public class GraphicsMenuField extends InterfaceObject {
             windowConfig.targetFPS = 60;
         }
 
-        applyGraphicsConfig();
+        applyConfig();
     }
 
     public void resetSettings() {
         windowConfig = windowConfig.getDefaultConfig();
         ConfigManager.addConfig("window config", windowConfig);
-        applyGraphicsConfig();
+        applyConfig();
     }
 
-    private void applyGraphicsConfig() {
+    @Override
+    public void applyConfig() {
         windowConfig.apply();
         ConfigManager.save("window config");
     }

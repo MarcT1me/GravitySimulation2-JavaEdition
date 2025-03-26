@@ -4,23 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
-import com.gravitysimulation2.gameinterface.menu.settings.fields.GameMenuField;
-import com.gravitysimulation2.gameinterface.menu.settings.fields.GraphicsMenuField;
-import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.gameinterface.menu.MenuObject;
+import com.gravitysimulation2.gameinterface.menu.settings.fields.GameSettingsField;
+import com.gravitysimulation2.gameinterface.menu.settings.fields.GraphicSettingsField;
+import com.gravitysimulation2.gameinterface.menu.settings.fields.WindowSettingsField;
 
-public class SettingsMenu extends InterfaceObject {
-    GameMenuField gameSettings;
-    GraphicsMenuField graphicSettings;
+public class SettingsMenu extends MenuObject {
+    GameSettingsField gameSettings;
+    WindowSettingsField windowSettings;
+    GraphicSettingsField graphicSettings;
     private InterfaceObject previousMenu;
 
+    // settings fields
+    final int NOT_CHOSEN_SETTINGS_FIELD = 0;
+    final int GAME_SETTINGS_FIELD = 1;
+    final int WINDOW_SETTINGS_FIELD = 2;
+    final int GRAPHIC_SETTINGS_FIELD = 3;
     int currentField = 0;
-
-    public SettingsMenu() {
-        super();
-        hide();
-    }
 
     public void setPreviousMenu(InterfaceObject previousMenu) {
         this.previousMenu = previousMenu;
@@ -40,10 +43,9 @@ public class SettingsMenu extends InterfaceObject {
         SettingsMenuBackground bgActor = new SettingsMenuBackground();
         bgActor.startX = categoryStartX;
 
-        // graphics group
-        gameSettings = new GameMenuField(categoryStartX);
+        // game group
+        gameSettings = new GameSettingsField(categoryStartX);
         gameSettings.updateRootGroup();
-        gameSettings.hide();
 
         TextButton openGameSettingsBtn = new TextButton("Game", skin);
 
@@ -57,31 +59,55 @@ public class SettingsMenu extends InterfaceObject {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     gameSettings.show();
+                    windowSettings.hide();
                     graphicSettings.hide();
-                    currentField = 1;
+                    currentField = GAME_SETTINGS_FIELD;
                 }
             }
         );
 
-        // graphics group
-        graphicSettings = new GraphicsMenuField(categoryStartX);
-        graphicSettings.updateRootGroup();
-        graphicSettings.hide();
+        // window group
+        windowSettings = new WindowSettingsField(categoryStartX);
+        windowSettings.updateRootGroup();
 
-        TextButton openGraphicSettings = new TextButton("Graphics", skin);
+        TextButton openWindowSettingsBtn = new TextButton("Window", skin);
 
-        openGraphicSettings.getLabel().setFontScale(relativeButtonFontSize);
-        openGraphicSettings.setPosition(relativePad,
+        openWindowSettingsBtn.getLabel().setFontScale(relativeButtonFontSize);
+        openWindowSettingsBtn.setPosition(relativePad,
             Gdx.graphics.getHeight() - relativeOpenButtonSizeY * 2f - relativePad * 2f
         );
-        openGraphicSettings.setSize(relativeOpenButtonSizeX, relativeOpenButtonSizeY);
-        openGraphicSettings.addListener(
+        openWindowSettingsBtn.setSize(relativeOpenButtonSizeX, relativeOpenButtonSizeY);
+        openWindowSettingsBtn.addListener(
             new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     gameSettings.hide();
+                    windowSettings.show();
+                    graphicSettings.hide();
+                    currentField = WINDOW_SETTINGS_FIELD;
+                }
+            }
+        );
+
+        // graphic group
+        graphicSettings = new GraphicSettingsField(categoryStartX);
+        graphicSettings.updateRootGroup();
+
+        TextButton openGraphicSettingsBtn = new TextButton("Graphics", skin);
+
+        openGraphicSettingsBtn.getLabel().setFontScale(relativeButtonFontSize);
+        openGraphicSettingsBtn.setPosition(relativePad,
+            Gdx.graphics.getHeight() - relativeOpenButtonSizeY * 3f - relativePad * 3f
+        );
+        openGraphicSettingsBtn.setSize(relativeOpenButtonSizeX, relativeOpenButtonSizeY);
+        openGraphicSettingsBtn.addListener(
+            new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    gameSettings.hide();
+                    windowSettings.hide();
                     graphicSettings.show();
-                    currentField = 2;
+                    currentField = GRAPHIC_SETTINGS_FIELD;
                 }
             }
         );
@@ -96,17 +122,12 @@ public class SettingsMenu extends InterfaceObject {
             new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    switch (currentField) {
-                        case 1:
-                            gameSettings.applySettings();
-                            break;
-                        case 2:
-                            graphicSettings.applySettings();
-                            break;
-                        default:
-                            return;
+                    SettingsMenuField field = getCurrentSettingsField();
+
+                    if (field != null) {
+                        field.applySettings();
+                        updateAfterConfigChanging();
                     }
-                    updateRootGroup();
                 }
             }
         );
@@ -121,20 +142,16 @@ public class SettingsMenu extends InterfaceObject {
             new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    switch (currentField) {
-                        case 0:
-                            gameSettings.resetSettings();
-                            graphicSettings.resetSettings();
-                        case 1:
-                            gameSettings.resetSettings();
-                            break;
-                        case 2:
-                            graphicSettings.resetSettings();
-                            break;
-                        default:
-                            return;
+                    SettingsMenuField field = getCurrentSettingsField();
+
+                    if (field != null) {
+                        field.resetSettings();
+                    } else {
+                        gameSettings.resetSettings();
+                        windowSettings.resetSettings();
+                        graphicSettings.resetSettings();
                     }
-                    updateRootGroup();
+                    updateAfterConfigChanging();
                 }
             }
         );
@@ -161,26 +178,44 @@ public class SettingsMenu extends InterfaceObject {
         rootGroup.addActor(bgActor);
         // game
         rootGroup.addActor(gameSettings.rootGroup);
+        rootGroup.addActor(openGameSettingsBtn);
+        // window
+        rootGroup.addActor(windowSettings.rootGroup);
+        rootGroup.addActor(openWindowSettingsBtn);
         // graphics
         rootGroup.addActor(graphicSettings.rootGroup);
+        rootGroup.addActor(openGraphicSettingsBtn);
 
         // button field
-        rootGroup.addActor(openGameSettingsBtn);
-        rootGroup.addActor(openGraphicSettings);
         rootGroup.addActor(applyButton);
         rootGroup.addActor(resetButton);
         rootGroup.addActor(backButton);
     }
 
+    private void updateAfterConfigChanging() {
+        updateRootGroup();
+        GravitySimulation2.getCurrentGameScreen().applyConfigs();
+    }
+
+    private SettingsMenuField getCurrentSettingsField() {
+        return switch (currentField) {
+            case 1 -> gameSettings;
+            case 2 -> windowSettings;
+            case 3 -> graphicSettings;
+            default -> null;
+        };
+    }
+
     @Override
     public void renderUiElements() {
         gameSettings.renderUiElements();
+        windowSettings.renderUiElements();
         graphicSettings.renderUiElements();
     }
 
     @Override
     public void show() {
         super.show();
-        currentField = 0;
+        currentField = NOT_CHOSEN_SETTINGS_FIELD;
     }
 }

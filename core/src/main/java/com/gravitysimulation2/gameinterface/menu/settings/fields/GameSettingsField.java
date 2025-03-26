@@ -5,27 +5,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+
+import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
-import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenuField;
 
-public class GameMenuField extends InterfaceObject {
-    public float categoryStartX;
+public class GameSettingsField extends SettingsMenuField {
     GameConfig gameConfig;
 
     Slider interfaceSizeSlider;
     Label interfaceSizeSliderValueLbl;
-
     CheckBox fpsBox;
     CheckBox versionBox;
-    CheckBox VBox;
-    CheckBox posBox;
-
     CheckBox debugUiBox;
 
-    public GameMenuField(float categoryStartX) {
-        super();
-        this.categoryStartX = categoryStartX;
+    public GameSettingsField(float categoryStartX) {
+        super(categoryStartX);
         gameConfig = (GameConfig) ConfigManager.getConfig("game config");
     }
 
@@ -73,24 +69,6 @@ public class GameMenuField extends InterfaceObject {
         curPosY -= relativePad + versionBox.getHeight();
         versionBox.setPosition(startPosX, curPosY);
 
-        // V
-        VBox = createCheckBox(
-            "show V vectors", Color.WHITE, relativeFontSize
-        );
-        VBox.setChecked(gameConfig.showVVectors);
-
-        curPosY -= relativePad + VBox.getHeight();
-        VBox.setPosition(startPosX, curPosY);
-
-        // pos
-        posBox = createCheckBox(
-            "show positions", Color.WHITE, relativeFontSize
-        );
-        posBox.setChecked(gameConfig.showPositions);
-
-        curPosY -= relativePad + posBox.getHeight();
-        posBox.setPosition(startPosX, curPosY);
-
         // is debug UI
         debugUiBox = createCheckBox(
             "debug UI", Color.WHITE, relativeFontSize
@@ -107,8 +85,6 @@ public class GameMenuField extends InterfaceObject {
 
         rootGroup.addActor(fpsBox);
         rootGroup.addActor(versionBox);
-        rootGroup.addActor(VBox);
-        rootGroup.addActor(posBox);
 
         rootGroup.addActor(debugUiBox);
     }
@@ -122,11 +98,8 @@ public class GameMenuField extends InterfaceObject {
         gameConfig.interfaceSize = interfaceSizeSlider.getValue();
         gameConfig.showFps = fpsBox.isChecked();
         gameConfig.showVersion = versionBox.isChecked();
-        gameConfig.showVVectors = VBox.isChecked();
-        gameConfig.showPositions = posBox.isChecked();
-        applyConfig();
-
         GameConfig.isDebugUi = debugUiBox.isChecked();
+        applyConfig();
     }
 
     public void resetSettings() {

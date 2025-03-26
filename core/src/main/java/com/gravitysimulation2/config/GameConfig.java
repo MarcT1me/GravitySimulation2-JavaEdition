@@ -18,8 +18,6 @@ public class GameConfig implements Config<GameConfig> {
     public float interfaceSize = 1;
     public boolean showFps = true;
     public boolean showVersion = true;
-    public boolean showVVectors = true;
-    public boolean showPositions = true;
 
     static {
         loadFromProperties();
