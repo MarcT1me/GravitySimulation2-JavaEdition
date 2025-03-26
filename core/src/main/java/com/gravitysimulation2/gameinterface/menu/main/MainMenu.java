@@ -109,7 +109,7 @@ public class MainMenu extends MenuObject {
             @Override
             public void draw(Batch batch, float parentAlpha) {
                 super.draw(batch, parentAlpha);
-                beginDraw(batch);
+                beginShape(batch);
 
                 drawRect(
                     screenCenterX - menuLbl.getPrefWidth() - relativePad * 2,
@@ -119,7 +119,7 @@ public class MainMenu extends MenuObject {
                     new Vector4(Color.DARK_GRAY.r, Color.DARK_GRAY.g, Color.DARK_GRAY.b, 0.5f)
                 );
 
-                endDraw(batch);
+                endShape(batch);
             }
         };
         rootGroup.addActor(bgActor);

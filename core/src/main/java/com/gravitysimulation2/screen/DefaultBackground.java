@@ -9,7 +9,7 @@ import com.gravitysimulation2.objects.IRenderer;
 
 public class DefaultBackground implements IRenderer, Disposable {
     public final SpriteBatch batch = new SpriteBatch();
-    final Texture bgImg = new Texture(Gdx.files.internal("starBg.png"));
+    final Texture bgImg = new Texture(Gdx.files.internal("StarBg.png"));
 
     public void resize(ScreenViewport viewport) {
         batch.setProjectionMatrix(viewport.getCamera().combined);

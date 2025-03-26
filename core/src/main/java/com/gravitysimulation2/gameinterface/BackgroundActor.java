@@ -47,14 +47,14 @@ public class BackgroundActor extends Actor implements Disposable {
         shapeRenderer = new ShapeRenderer();
     }
 
-    protected void beginDraw(Batch batch) {
+    protected void beginShape(Batch batch) {
         batch.end();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    protected void endDraw(Batch batch) {
+    protected void endShape(Batch batch) {
         batch.begin();
     }
 

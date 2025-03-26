@@ -1,4 +1,4 @@
-package com.gravitysimulation2;
+package com.gravitysimulation2.objects.object.objectypes;
 
 public class SimpleConditionalTimer {
     private float timeAccumulator = 0f;

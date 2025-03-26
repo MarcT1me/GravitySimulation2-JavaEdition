@@ -1,7 +1,6 @@
 package com.gravitysimulation2.objects.object;
 
 import com.badlogic.gdx.utils.Disposable;
-//import com.gravitysimulation2.objects.rendererobject.*;
 import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.objects.IRenderer;
 import com.gravitysimulation2.objects.IUpdatable;

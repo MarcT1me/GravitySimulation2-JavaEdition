@@ -109,6 +109,7 @@ public class WindowSettingsField extends SettingsMenuField {
         targetFpsLbl.setPosition(startPosX + relativePad, curPosY);
 
         fpsSlider = createSlider(0, 300, 1, false, Color.BLUE);
+        fpsSlider.setSize(fpsSlider.getPrefWidth(), relativePad * 2.5f);
         fpsSlider.setValue(windowConfig.targetFPS);
         fpsSlider.setPosition(
             startPosX + targetFpsLbl.getWidth() + relativePad * 3,

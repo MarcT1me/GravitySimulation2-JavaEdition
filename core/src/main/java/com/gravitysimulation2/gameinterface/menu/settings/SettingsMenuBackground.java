@@ -13,7 +13,7 @@ public class SettingsMenuBackground extends BackgroundActor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        beginDraw(batch);
+        beginShape(batch);
 
         drawRect(
             0, 0,
@@ -30,6 +30,6 @@ public class SettingsMenuBackground extends BackgroundActor {
             startX, Gdx.graphics.getHeight(),
             new Vector4(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.5f)
         );
-        endDraw(batch);
+        endShape(batch);
     }
 }

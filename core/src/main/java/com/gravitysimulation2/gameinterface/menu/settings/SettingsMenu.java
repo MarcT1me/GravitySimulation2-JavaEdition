@@ -116,7 +116,7 @@ public class SettingsMenu extends MenuObject {
         TextButton applyButton = new TextButton("Apply", skin);
 
         applyButton.getLabel().setFontScale(relativeButtonFontSize);
-        applyButton.setPosition(relativePad, relativePad);
+        applyButton.setPosition(relativePad, relativePad + 20);
         applyButton.setSize(relativeButtonSizeX, relativeButtonSizeY);
         applyButton.addListener(
             new ClickListener() {
@@ -136,7 +136,7 @@ public class SettingsMenu extends MenuObject {
         TextButton resetButton = new TextButton("reset", skin);
 
         resetButton.getLabel().setFontScale(relativeButtonFontSize);
-        resetButton.setPosition(relativePad + relativeButtonSizeX + relativePad, relativePad);
+        resetButton.setPosition(relativePad + relativeButtonSizeX + relativePad, relativePad + 20);
         resetButton.setSize(relativeButtonSizeX, relativeButtonSizeY);
         resetButton.addListener(
             new ClickListener() {
@@ -160,7 +160,7 @@ public class SettingsMenu extends MenuObject {
         TextButton backButton = new TextButton("Back", skin);
 
         backButton.getLabel().setFontScale(relativeButtonFontSize);
-        backButton.setPosition(relativePad + relativeButtonSizeX * 2f + relativePad * 2f, relativePad);
+        backButton.setPosition(relativePad + relativeButtonSizeX * 2f + relativePad * 2f, relativePad + 20);
         backButton.setSize(relativeButtonSizeX, relativeButtonSizeY);
         backButton.addListener(
             new ClickListener() {
@@ -193,8 +193,8 @@ public class SettingsMenu extends MenuObject {
     }
 
     private void updateAfterConfigChanging() {
-        updateRootGroup();
         GravitySimulation2.getCurrentGameScreen().applyConfigs();
+        GravitySimulation2.menuMap.values().forEach(InterfaceObject::updateRootGroup);
     }
 
     private SettingsMenuField getCurrentSettingsField() {
@@ -208,6 +208,7 @@ public class SettingsMenu extends MenuObject {
 
     @Override
     public void renderUiElements() {
+        if (!isVisible()) return;
         gameSettings.renderUiElements();
         windowSettings.renderUiElements();
         graphicSettings.renderUiElements();

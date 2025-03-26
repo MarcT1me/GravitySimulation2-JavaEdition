@@ -12,26 +12,6 @@ public class PlanetObject extends ObjectType {
     }
 
     @Override
-    public void setupUI() {
-
-    }
-
-    @Override
-    public void preUpdate(float deltaTime) {
-
-    }
-
-    @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-    }
-
-    @Override
-    public void preRender() {
-
-    }
-
-    @Override
     public void render() {
         super.render();
 
@@ -41,16 +21,6 @@ public class PlanetObject extends ObjectType {
         shapeRenderer.end();
 
         renderUiElements();
-    }
-
-    @Override
-    public void renderUiElements() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }
 

@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Disposable;
 
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.objects.camera.Camera;
 import com.gravitysimulation2.objects.object.GameObject;
@@ -44,18 +44,21 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer 
         objects.put(object.name, object);
     }
 
-    public void delObject(GameObject object) {
-        objects.remove(object.name);
-    }
-
     public void applyConfigs() {
         objects.values().forEach(
-            object -> object.objectType.applyConfigs()
+            object -> {
+                object.objectType.applyConfigs();
+                object.objectType.updateRootGroup();
+            }
         );
     }
 
     public Stream<PhysicBody> getPhysicBodyStream() {
         return objects.values().stream().map(gameObject -> gameObject.physicBody);
+    }
+
+    public void resize(ScreenViewport viewport) {
+        shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
     }
 
     @Override
@@ -70,8 +73,8 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer 
     @Override
     public void update(float deltaTime) {
         // Управление камерой
-        float moveSpeed = 500.0f * deltaTime; // Скорость движения
-        float zoomSpeed = 0.5f * deltaTime;   // Скорость зума
+        float moveSpeed = 500.0f * deltaTime;
+        float zoomSpeed = 0.5f * deltaTime;
 
         // Движение стрелками
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -116,9 +119,7 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer 
     @Override
     public void setupUI() {
         objects.values().forEach(
-            (object) -> {
-                rootGroup.addActor(object.objectType.rootGroup);
-            }
+            (object) -> rootGroup.addActor(object.objectType.updateRootGroup().rootGroup)
         );
     }
 

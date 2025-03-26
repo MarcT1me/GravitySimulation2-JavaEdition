@@ -77,10 +77,13 @@ public abstract class InterfaceObject implements Disposable {
 
     public abstract void renderUiElements();
 
+    public boolean isVisible() {
+        return rootGroup.isVisible();
+    }
+
     public InterfaceObject updateRootGroup() {
         rootGroup.clear();
         setupUI();
-        rootGroup.setPosition(0, 0);
         if (GameConfig.isDebugUi) rootGroup.debugAll();
         return this;
     }

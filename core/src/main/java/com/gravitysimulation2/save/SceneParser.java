@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class SceneParser {
     public static Map<String, Object> loadSave(String filePath) {
-        FileHandle file = Gdx.files.internal(filePath); // Для файлов в папке assets
+        FileHandle file = Gdx.files.local(filePath);
         JsonReader reader = new JsonReader();
         JsonValue root = reader.parse(file);
         return (Map<String, Object>) parseJson(root);

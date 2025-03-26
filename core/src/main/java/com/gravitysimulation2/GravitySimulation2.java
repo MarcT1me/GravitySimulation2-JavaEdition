@@ -92,6 +92,7 @@ public class GravitySimulation2 extends Game {
         getGameMenu("main").show();
     }
 
+    // screen
     public void setScreen(ScreenObject screen) {
         super.setScreen(screen);
         if (screen != null) {
@@ -104,6 +105,7 @@ public class GravitySimulation2 extends Game {
         return (ScreenObject) super.getScreen();
     }
 
+    // initializing
     private void initAllMenu() {
         menuMap.put("load", new LoadMenu());
         menuMap.put("settings", new SettingsMenu());
@@ -119,6 +121,12 @@ public class GravitySimulation2 extends Game {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+    }
+
+    // cycle
+    @Override
     public void render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -126,11 +134,13 @@ public class GravitySimulation2 extends Game {
         super.render();
     }
 
+    // exiting
     @Override
     public void dispose() {
         super.dispose();
         screenMap.values().forEach(Disposable::dispose);
         menuMap.values().forEach(Disposable::dispose);
         sceneMap.values().forEach(Disposable::dispose);
+        InterfaceObject.disposeSkin();
     }
 }

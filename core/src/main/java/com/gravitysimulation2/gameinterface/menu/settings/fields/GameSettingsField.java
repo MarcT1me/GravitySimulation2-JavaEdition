@@ -38,6 +38,7 @@ public class GameSettingsField extends SettingsMenuField {
         interfaceSizeLbl.setPosition(startPosX + relativePad, curPosY);
 
         interfaceSizeSlider = createSlider(0.35f, 1.25f, 0.01f, false, Color.GRAY);
+        interfaceSizeSlider.setSize(interfaceSizeLbl.getPrefWidth(), relativePad * 2.5f);
         interfaceSizeSlider.setValue(gameConfig.interfaceSize);
         interfaceSizeSlider.setPosition(
             categoryStartX + interfaceSizeLbl.getWidth() + relativePad * 3,
@@ -97,8 +98,9 @@ public class GameSettingsField extends SettingsMenuField {
         gameConfig.interfaceSize = interfaceSizeSlider.getValue();
         gameConfig.showFps = fpsBox.isChecked();
         gameConfig.showVersion = versionBox.isChecked();
-        GameConfig.isDebugUi = debugUiBox.isChecked();
         applyConfig();
+
+        GameConfig.isDebugUi = debugUiBox.isChecked();
     }
 
     public void resetSettings() {

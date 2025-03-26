@@ -10,7 +10,7 @@ public class WindowConfig implements Config<WindowConfig> {
     public int windowHeight = 900;
 
     // fps
-    public boolean vsync = true;
+    public boolean vsync = false;
     public int targetFPS = 0;
 
     // monitor

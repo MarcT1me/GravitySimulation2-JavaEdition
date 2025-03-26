@@ -26,12 +26,12 @@ public class MainMenuScreen extends ScreenObject {
         rootGroup.addActor(menu.updateRootGroup().rootGroup);
         rootGroup.addActor(loadMenu.updateRootGroup().rootGroup);
         rootGroup.addActor(settingsMenu.updateRootGroup().rootGroup);
+        super.setupUI();
     }
 
     @Override
     public void renderUiElements() {
-        menu.renderUiElements();
-        loadMenu.renderUiElements();
+        super.renderUiElements();
         settingsMenu.renderUiElements();
     }
 

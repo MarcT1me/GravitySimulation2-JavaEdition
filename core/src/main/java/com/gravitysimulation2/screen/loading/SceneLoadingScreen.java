@@ -14,17 +14,19 @@ public class SceneLoadingScreen extends ScreenObject {
         float screenCenterY = Gdx.graphics.getHeight() / 2f;
         float relativeFontSize = getRelativeScreenHeightScalar(10f);
 
-        Label loadingLbl = createLabel("Loadig", Color.YELLOW, relativeFontSize);
+        Label loadingLbl = createLabel("Loading", Color.YELLOW, relativeFontSize);
         loadingLbl.setPosition(
             screenCenterX - loadingLbl.getWidth() / 2f,
             screenCenterY - loadingLbl.getHeight() / 2f
         );
 
         rootGroup.addActor(loadingLbl);
+        super.setupUI();
     }
 
     @Override
     public void renderUiElements() {
+        super.renderUiElements();
         if (GravitySimulation2.getGameScene("game scene").loaded)
             switchToScene();
     }

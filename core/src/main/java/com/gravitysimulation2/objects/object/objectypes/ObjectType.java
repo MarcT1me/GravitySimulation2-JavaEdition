@@ -1,13 +1,14 @@
 package com.gravitysimulation2.objects.object.objectypes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Disposable;
 
-import com.gravitysimulation2.FixedVector2Queue;
-import com.gravitysimulation2.SimpleConditionalTimer;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GraphicConfig;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
@@ -25,8 +26,13 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     public Vector3 color;
 
     protected final ShapeRenderer shapeRenderer;
-    protected final FixedVector2Queue trajectoryQueue;
+    protected final TrajectoryQueue trajectoryQueue;
     protected final SimpleConditionalTimer trajectoryTimer;
+
+    protected Label vModLbl;
+    protected Label posLbl;
+
+    GraphicConfig graphicConfig;
 
     public ObjectType(GameObject sourceObject, Map<String, Object> objectData) {
         this.sourceObject = sourceObject;
@@ -34,17 +40,33 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
         this.color = SceneParser.parseVector3(objectData.get("color"));
 
         this.shapeRenderer = sourceObject.scene.shapeRenderer;
-        this.trajectoryQueue = new FixedVector2Queue();
+        this.trajectoryQueue = new TrajectoryQueue();
         this.trajectoryTimer = new SimpleConditionalTimer();
 
         applyConfigs();
     }
 
-    public void applyConfigs() {
-        GraphicConfig config = (GraphicConfig) ConfigManager.getConfig("graphic config");
+    @Override
+    public void setupUI() {
+        vModLbl = createLabel("V: ", Color.WHITE, 1);
+        vModLbl.setVisible(graphicConfig.showVMods);
 
-        this.trajectoryQueue.setMaxSize(config.trajectoryLen);
-        this.trajectoryTimer.setIntervalLength(config.trajectoryInterval);
+        posLbl = createLabel("pos: ", Color.WHITE, 1);
+        posLbl.setVisible(graphicConfig.showPositions);
+
+        rootGroup.addActor(vModLbl);
+        rootGroup.addActor(posLbl);
+    }
+
+    public void applyConfigs() {
+        graphicConfig = (GraphicConfig) ConfigManager.getConfig("graphic config");
+
+        if (graphicConfig.showTrajectory) {
+            this.trajectoryQueue.setMaxSize(graphicConfig.trajectoryLen);
+            this.trajectoryTimer.setIntervalLength(graphicConfig.trajectoryInterval);
+        } else {
+            trajectoryQueue.setMaxSize(0);
+        }
     }
 
     public Vector2 fromWorldToScreenPosition(Vector2 vec) {
@@ -56,6 +78,11 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     }
 
     @Override
+    public void preUpdate(float deltaTime) {
+
+    }
+
+    @Override
     public void update(float deltaTime) {
         if (trajectoryTimer.update(deltaTime)) {
             trajectoryQueue.add(sourceObject.physicBody.pos);
@@ -64,35 +91,100 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     }
 
     @Override
-    public void render() {
+    public void preRender() {
         // prepare rendering
         screenPos = fromWorldToScreenPosition(sourceObject.physicBody.pos);
-        Vector2 screenCenter = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+    }
 
+    @Override
+    public void render() {
+        // enable all need GL functions
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         // render
-        shapeRenderer.setColor(color.x, color.y, color.z, 0.1f);
-        shapeRenderer.line(
-            (screenCenter.cpy().add(screenPos)).scl(0.5f),
-            screenPos
-        );
+        if (graphicConfig.showVVectors) renderVVector();
 
-        // prepare orbit
-        shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 0.5f);
-
-        // render orbits
-        Vector2 prev = null;
-        for (Vector2 point : trajectoryQueue.getElements()) {
-            point = fromWorldToScreenPosition(point);
-            if (prev != null) {
-                shapeRenderer.line(prev, point);
-            }
-            prev = point;
-        }
+        if (graphicConfig.showTrajectory) renderTrajectory();
+        if (graphicConfig.showDirectionLine) renderDirectionLine();
 
         // render end
         shapeRenderer.end();
+    }
+
+    protected void renderVVector() {
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.line(
+            screenPos,
+            screenPos.cpy().add(sourceObject.physicBody.velocity.cpy().scl(graphicConfig.vVectorsScale))
+        );
+    }
+
+    protected void renderDirectionLine() {
+        shapeRenderer.setColor(color.x, color.y, color.z, graphicConfig.dirLineAlpha);
+        shapeRenderer.line(
+            (
+                new Vector2(
+                    Gdx.graphics.getWidth() / 2f,
+                    Gdx.graphics.getHeight() / 2f).cpy().add(screenPos)
+            ).scl(0.5f),
+            screenPos
+        );
+    }
+
+    protected void renderTrajectory() {
+        // render trajectory
+        Vector2 prevPoins = null;
+        int currentIndex = 0;
+        for (Vector2 point : trajectoryQueue.getElements()) {
+            point = fromWorldToScreenPosition(point);
+
+            // calculate alpha
+            float alpha = (float) currentIndex / trajectoryQueue.size();
+            shapeRenderer.setColor(0.5f, 0.5f, 0.5f, alpha);
+
+            // render
+            if (prevPoins != null) {
+                shapeRenderer.line(prevPoins, point);
+            }
+
+            // set prev
+            prevPoins = point;
+            currentIndex++;
+        }
+    }
+
+    @Override
+    public void renderUiElements() {
+        float curPosY = 0f;
+
+        posLbl.setText(
+            String.format(
+                "pos: {x: %.2f, y: %.2f}",
+                sourceObject.physicBody.pos.x,
+                sourceObject.physicBody.pos.y
+            )
+        );
+        posLbl.setSize(posLbl.getPrefWidth(), posLbl.getPrefHeight());
+        Vector2 posLblPos = screenPos.add(
+            new Vector2(-posLbl.getWidth() / 2f, -posLbl.getHeight())
+        );
+        posLbl.setPosition(posLblPos.x, posLblPos.y);
+
+        vModLbl.setText(
+            String.format(
+                "vel: {x: %.2f, y: %.2f}",
+                sourceObject.physicBody.velocity.x,
+                sourceObject.physicBody.velocity.y
+            )
+        );
+        vModLbl.setSize(vModLbl.getPrefWidth(), vModLbl.getPrefHeight());
+        if (graphicConfig.showPositions) curPosY -= vModLbl.getHeight();
+        Vector2 vModLblPos = screenPos.cpy().add(
+            new Vector2(0, -posLbl.getHeight() / 2f + curPosY)
+        );
+        vModLbl.setPosition(vModLblPos.x, vModLblPos.y);
     }
 
     @Override
