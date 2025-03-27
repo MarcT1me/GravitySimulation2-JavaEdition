@@ -23,7 +23,7 @@ public class SettingsMenu extends MenuObject {
     final int GAME_SETTINGS_FIELD = 1;
     final int WINDOW_SETTINGS_FIELD = 2;
     final int GRAPHIC_SETTINGS_FIELD = 3;
-    int currentField = 0;
+    int currentField = NOT_CHOSEN_SETTINGS_FIELD;
 
     public void setPreviousMenu(InterfaceObject previousMenu) {
         this.previousMenu = previousMenu;
@@ -194,7 +194,7 @@ public class SettingsMenu extends MenuObject {
 
     private void updateAfterConfigChanging() {
         GravitySimulation2.getCurrentGameScreen().applyConfigs();
-        GravitySimulation2.menuMap.values().forEach(InterfaceObject::updateRootGroup);
+        GravitySimulation2.getCurrentGameScreen().updateRootGroup();
     }
 
     private SettingsMenuField getCurrentSettingsField() {

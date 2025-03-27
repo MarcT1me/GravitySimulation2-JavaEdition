@@ -15,6 +15,8 @@ public class PlanetObject extends ObjectType {
     public void render() {
         super.render();
 
+        if (isNotAllowedScreenPositions()) return;
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(color.x, color.y, color.z, 1.0f);
         shapeRenderer.circle(screenPos.x, screenPos.y, fromWorldToScreenScalar(sourceObject.physicBody.radius));

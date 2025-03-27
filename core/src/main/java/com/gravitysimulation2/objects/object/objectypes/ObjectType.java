@@ -29,6 +29,7 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     protected final TrajectoryQueue trajectoryQueue;
     protected final SimpleConditionalTimer trajectoryTimer;
 
+    protected Label nameLbl;
     protected Label vModLbl;
     protected Label posLbl;
 
@@ -48,12 +49,17 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
 
     @Override
     public void setupUI() {
-        vModLbl = createLabel("V: ", Color.WHITE, 1);
+        float relativeFontSize = getRelativeScreenHeightScalar(1f);
+
+        nameLbl = createLabel(sourceObject.name, Color.WHITE, relativeFontSize);
+
+        vModLbl = createLabel("V: ", Color.WHITE, relativeFontSize);
         vModLbl.setVisible(graphicConfig.showVMods);
 
-        posLbl = createLabel("pos: ", Color.WHITE, 1);
+        posLbl = createLabel("pos: ", Color.WHITE, relativeFontSize);
         posLbl.setVisible(graphicConfig.showPositions);
 
+        rootGroup.addActor(nameLbl);
         rootGroup.addActor(vModLbl);
         rootGroup.addActor(posLbl);
     }
@@ -90,14 +96,27 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
         }
     }
 
+    protected boolean isNotAllowedScreenPositions() {
+        return false;
+//        Vector2 screenSize =
+//            new Vector2(
+//                Gdx.graphics.getWidth(),
+//                Gdx.graphics.getHeight()
+//            );
+//        return screenPos.add(screenSize.cpy().scl(
+//            0.5f)
+//        ).len() > screenSize.cpy().scl(
+//            1.5f
+//        ).len();
+    }
+
     @Override
     public void preRender() {
         // prepare rendering
         screenPos = fromWorldToScreenPosition(sourceObject.physicBody.pos);
-    }
 
-    @Override
-    public void render() {
+        if (isNotAllowedScreenPositions()) return;
+
         // enable all need GL functions
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -156,9 +175,22 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     }
 
     @Override
-    public void renderUiElements() {
-        float curPosY = 0f;
+    public void render() {
 
+    }
+
+    @Override
+    public void renderUiElements() {
+        // name
+        Vector2 nameLblPos = screenPos.cpy().add(
+            new Vector2(
+                -nameLbl.getWidth() / 2f,
+                5
+            )
+        );
+        nameLbl.setPosition(nameLblPos.x, nameLblPos.y);
+
+        // pos
         posLbl.setText(
             String.format(
                 "pos: {x: %.2f, y: %.2f}",
@@ -167,11 +199,13 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
             )
         );
         posLbl.setSize(posLbl.getPrefWidth(), posLbl.getPrefHeight());
-        Vector2 posLblPos = screenPos.add(
-            new Vector2(-posLbl.getWidth() / 2f, -posLbl.getHeight())
+        Vector2 posLblPos = screenPos.cpy().add(
+            new Vector2(
+                -posLbl.getWidth() / 2f,
+                -posLbl.getHeight())
         );
         posLbl.setPosition(posLblPos.x, posLblPos.y);
-
+        // vel
         vModLbl.setText(
             String.format(
                 "vel: {x: %.2f, y: %.2f}",
@@ -179,10 +213,14 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
                 sourceObject.physicBody.velocity.y
             )
         );
+        float curPosY = -5f;
         vModLbl.setSize(vModLbl.getPrefWidth(), vModLbl.getPrefHeight());
-        if (graphicConfig.showPositions) curPosY -= vModLbl.getHeight();
+        if (graphicConfig.showPositions)
+            curPosY -= posLbl.getHeight();
         Vector2 vModLblPos = screenPos.cpy().add(
-            new Vector2(0, -posLbl.getHeight() / 2f + curPosY)
+            new Vector2(
+                -vModLbl.getWidth() / 2f,
+                -vModLbl.getHeight() / 2f + curPosY)
         );
         vModLbl.setPosition(vModLblPos.x, vModLblPos.y);
     }
