@@ -45,6 +45,8 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer 
     }
 
     public void applyConfigs() {
+        updateRootGroup();
+
         objects.values().forEach(
             object -> {
                 object.objectType.applyConfigs();

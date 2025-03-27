@@ -24,7 +24,7 @@ public class TrajectoryQueue {
     }
 
     private void pullingToMaxSize() {
-        while (queue.size() >= maxSize) queue.poll();
+        while (queue.size() > maxSize) queue.poll();
     }
 
     public Iterable<Vector2> getElements() {
