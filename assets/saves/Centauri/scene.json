@@ -1,47 +1,44 @@
 {
   "Alpha Centauri A": {
     "pos": [-1.1e9, 0.0],
-    "vel": [0.0, 22.0],
+    "vel": [0.0, 22000.0],
+
+    "mass": 2.18e30,
+    "radius": 8.6e8,
+
+    "density": 1408.0,
 
     "angle": 0.0,
-    "mass": 2.18e30,
-    "density": 1408.0,
-    "radius": 8.6e8,
     "angularVelocity": 0.0,
 
-    "objectData": {
-      "type": "STAR",
-      "color": [255.0, 228.0, 181.0]
-    }
+    "objectData": {"type": "STAR", "color": [0.996, 0.894, 0.710], "force": 0.0}
   },
   "Alpha Centauri B": {
     "pos": [8.9e8, 0.0],
-    "vel": [0.0, -27.0],
+    "vel": [0.0, -27000.0],
+
+    "mass": 1.8e30,
+    "radius": 6.0e8,
+
+    "density": 1602.0,
 
     "angle": 0.0,
-    "mass": 1.8e30,
-    "density": 1602.0,
-    "radius": 6.0e8,
     "angularVelocity": 0.0,
 
-    "objectData": {
-      "type": "STAR",
-      "color": [255.0, 180.0, 107.0]
-    }
+    "objectData": {"type": "STAR", "color": [1.0, 0.698, 0.416], "force": 0.0}
   },
   "Proxima Centauri": {
     "pos": [0.0, 4.01e12],
-    "vel": [-5.1e3, 0.0],
+    "vel": [-510.0, 0.0],
+
+    "mass": 2.45e29,
+    "radius": 1.07e8,
+
+    "density": 54300.0,
 
     "angle": 0.0,
-    "mass": 2.45e28,
-    "density": 54300.0,
-    "radius": 1.97e8,
     "angularVelocity": 0.0,
 
-    "objectData": {
-      "type": "STAR",
-      "color": [255.0, 80.0, 80.0]
-    }
+    "objectData": {"type": "STAR", "color": [1.0, 0.314, 0.314], "force": 0.0}
   }
 }

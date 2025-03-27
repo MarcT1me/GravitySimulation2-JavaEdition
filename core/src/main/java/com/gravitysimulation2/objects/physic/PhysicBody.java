@@ -1,37 +1,35 @@
 package com.gravitysimulation2.objects.physic;
 
-import com.badlogic.gdx.math.Vector2;
-
 import java.util.stream.Stream;
 
 public class PhysicBody extends Physic {
     // forces
-    public final Vector2 F_total = new Vector2();
-    public final Vector2 F_gravity = new Vector2();
-    public final Vector2 F_tidal = new Vector2();
-    public final Vector2 F_torque = new Vector2();
+    public final Vector2D F_total = new Vector2D();
+    public final Vector2D F_gravity = new Vector2D();
+    public final Vector2D F_tidal = new Vector2D();
+    public final Vector2D F_torque = new Vector2D();
 
-    public Vector2 pos;  // general position
-    public float angle;  // rotation
+    public Vector2D pos;  // general position
+    public double angle;  // rotation
 
     // sizes
-    public float mass;  // mass of object
-    public float radius;  // sizes (ellipse width height)
+    public double mass;  // mass of object
+    public double radius;  // sizes (ellipse width height)
 
     // velocity
-    public Vector2 velocity;  // general
-    public float angularVelocity; // rotation
+    public Vector2D velocity;  // general
+    public double angularVelocity; // rotation
 
     // other
-    public float structuralIntegrity;
+    public double structuralIntegrity;
 
-    public float momentOfInertia;
-    public float strength;
+    public double momentOfInertia;
+    public double strength;
 
     public PhysicBody(
-        Vector2 pos, float angle,
-        float mass, float density, float radius,
-        Vector2 velocity, float angularVelocity
+        Vector2D pos, double angle,
+        double mass, double density, double radius,
+        Vector2D velocity, double angularVelocity
     ) {
         this.pos = pos;
         this.angle = angle;
@@ -49,15 +47,15 @@ public class PhysicBody extends Physic {
     }
 
     // getters (available to changes)
-    public Vector2 getPos() {
+    public Vector2D getPos() {
         return pos;
     }
 
-    public float getMass() {
+    public double getMass() {
         return mass;
     }
 
-    public float getRadius() {
+    public double getRadius() {
         return radius;
     }
 
@@ -68,11 +66,14 @@ public class PhysicBody extends Physic {
         objects
             .forEach(obj -> {
                 if (obj == this) return; // Игнорируем себя
+
+                Vector2D force = calculateGravityForce(
+                    this.getPos(), this.getMass(),
+                    obj.getPos(), obj.getMass()
+                );
+
                 F_gravity.add(
-                    calculateGravityForce(
-                        this.getPos(), this.getMass(),
-                        obj.getPos(), obj.getMass()
-                    )
+                    force
                 );
             });
     }
@@ -97,12 +98,12 @@ public class PhysicBody extends Physic {
 
             F_tidal.add(
                 Physic.calculateTidalForce(
-                    primary.getPos(), primary.getMass(), this.getPos(), this.getRadius(), this.getMass()
+                    this.getPos(), this.getMass(), satellite.getPos(), satellite.getRadius(), satellite.getMass()
                 )
             );
 
-            float crossSection = (float) (Math.PI * radius * radius);
-            float stress = F_tidal.len() / crossSection;
+            double crossSection = Math.PI * radius * radius;
+            double stress = F_tidal.len() / crossSection;
 
             if (stress > strength) {
                 structuralIntegrity -= 0.1f;
@@ -117,9 +118,9 @@ public class PhysicBody extends Physic {
         objects.forEach(other -> {
             if (this == other) return;
 
-            Vector2 r = other.getPos().cpy().sub(this.getPos());
-            float crossProduct = r.crs(F_gravity.x, F_gravity.y);
-            F_torque.add(crossProduct, crossProduct);
+            Vector2D r = other.getPos().cpy().sub(this.getPos());
+            double crossProduct = r.crs(new Vector2D(F_gravity.x, F_gravity.y));
+            F_torque.add(new Vector2D(crossProduct, crossProduct));
         });
     }
 
@@ -137,7 +138,7 @@ public class PhysicBody extends Physic {
     }
 
     public void updateVelocity(float deltaTime) {
-        Vector2 acceleration = F_total.cpy().scl(1.0f / mass);
+        Vector2D acceleration = F_total.cpy().scl(1.0f / mass);
         velocity.add(acceleration.scl(deltaTime));
     }
 

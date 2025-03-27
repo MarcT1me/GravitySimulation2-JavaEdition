@@ -2,6 +2,7 @@ package com.gravitysimulation2.objects.camera;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.gravitysimulation2.objects.physic.Vector2D;
 
 public class Camera {
     public Vector2 pos;
@@ -12,10 +13,10 @@ public class Camera {
         this.zoom = zoom;
     }
 
-    public Vector2 fromWorldToScreenPosition(Vector2 objectPos) {
+    public Vector2 fromWorldToScreenPosition(Vector2D objectPos) {
         return new Vector2(
-            (objectPos.x - pos.x) / zoom + Gdx.graphics.getWidth() / 2f,
-            (objectPos.y - pos.y) / zoom + Gdx.graphics.getHeight() / 2f
+            ((float) objectPos.x - pos.x) / zoom + Gdx.graphics.getWidth() / 2f,
+            ((float) objectPos.y - pos.y) / zoom + Gdx.graphics.getHeight() / 2f
         );
     }
 
@@ -27,7 +28,7 @@ public class Camera {
         zoom += offset * zoom;
     }
 
-    public void zoomToPoint(float deltaZoom, Vector2 screenPoint) {
+    public void zoomToPoint(float deltaZoom, Vector2D screenPoint) {
         Vector2 worldBefore = fromWorldToScreenPosition(screenPoint);
         zoom += deltaZoom;
         Vector2 worldAfter = fromWorldToScreenPosition(screenPoint);

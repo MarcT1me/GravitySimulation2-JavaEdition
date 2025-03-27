@@ -12,15 +12,27 @@ public class PlanetObject extends ObjectType {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void preRender() {
+        updateScreenPos();
 
         if (isNotAllowedScreenPositions()) return;
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(color.x, color.y, color.z, 1.0f);
-        shapeRenderer.circle(screenPos.x, screenPos.y, fromWorldToScreenScalar(sourceObject.physicBody.radius));
-        shapeRenderer.end();
+        super.preRender();
+    }
+
+    @Override
+    public void render() {
+        if (isNotAllowedScreenPositions()) return;
+
+        super.render();
+
+        float radius = fromWorldToScreenScalar(sourceObject.physicBody.radius);
+        if (isAllowRadius(radius)) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(color.x, color.y, color.z, 1.0f);
+            shapeRenderer.circle(screenPos.x, screenPos.y, radius);
+            shapeRenderer.end();
+        }
 
         renderUiElements();
     }

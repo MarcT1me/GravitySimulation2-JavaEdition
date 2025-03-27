@@ -1,12 +1,150 @@
 {
   "Sun": {
     "pos": [0.0, 0.0],
-    "angle": 0.0,
-    "mass": 1.0,
-    "density": 0.0,
-    "radius": 1.0,
     "vel": [0.0, 0.0],
+
+    "mass": 1.989E30,
+    "radius": 6.957e08,
+
+    "density": 0.0,
+
+    "angle": 0.0,
     "angularVelocity": 0.0,
-    "objectData": {"type": "STAR", "color": [255.0, 255.0, 255.0], "force": 0.0}
+
+    "objectData": {"type": "STAR", "color": [0.784, 0.784, 0.392], "force": 0.0}
+  },
+
+  "Mercury": {
+    "pos": [0.0, 57910000000.0],
+    "vel": [45000.0, 0.0],
+
+    "mass": 3.301E23,
+    "radius": 2.44e06,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.545, 0.545, 0.545]}
+  },
+
+  "Venus": {
+    "pos": [0.0, 108000000000.0],
+    "vel": [35000.0, 0.0],
+
+    "mass": 4.867E24,
+    "radius": 6.05e06,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.859, 0.784, 0.714]}
+  },
+
+  "Earth": {
+    "pos": [0.0, 149597870700.0],
+    "vel": [30000.0, 0.0],
+
+    "mass": 5.972E24,
+    "radius": 6.371e06,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.039, 0.490, 1.0]}
+  },
+  "Moon": {
+    "pos": [0.0, 150000000000.0],
+    "vel": [31000.0, 0.0],
+
+    "mass": 7.3477e22,
+    "radius": 1.737e06,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "SATELLITE", "color": [0.471, 0.471, 0.471], "attach to": "Earth", "index":  0}
+  },
+
+  "Mars": {
+    "pos": [0.0, 228000000000.0],
+    "vel": [24130.0, 0.0],
+
+    "mass": 6.417E23,
+    "radius": 3.39e06,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.804, 0.392, 0.188]}
+  },
+
+  "Jupiter": {
+    "pos": [0.0, 778570000000.0],
+    "vel": [13070.0, 0.0],
+
+    "mass": 1.898E27,
+    "radius": 7.149e07,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.714, 0.647, 0.545]}
+  },
+
+  "Saturn": {
+    "pos": [0.0, 1429400000000.0],
+    "vel": [9000.0, 0.0],
+
+    "mass": 5.683E26,
+    "radius": 6.026e07,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [1.0, 1.0, 0.392]}
+  },
+
+  "Uranus": {
+    "pos": [0.0, 2870990000000.0],
+    "vel": [6800.0, 0.0],
+
+    "mass": 8.681E25,
+    "radius": 2.556e07,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.0, 1.0, 1.0]}
+  },
+
+  "Neptune": {
+    "pos": [0.0, 4498250000000.0],
+    "vel": [5400.0, 0.0],
+
+    "mass": 1.024E26,
+    "radius": 2.476e07,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.0, 0.0, 1.0]}
   }
 }

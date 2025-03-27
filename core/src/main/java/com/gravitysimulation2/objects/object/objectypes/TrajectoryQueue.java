@@ -1,11 +1,11 @@
 package com.gravitysimulation2.objects.object.objectypes;
 
-import com.badlogic.gdx.math.Vector2;
+import com.gravitysimulation2.objects.physic.Vector2D;
 
 import java.util.ArrayDeque;
 
 public class TrajectoryQueue {
-    private final ArrayDeque<Vector2> queue;
+    private final ArrayDeque<Vector2D> queue;
     private int maxSize;
 
     public TrajectoryQueue() {
@@ -17,9 +17,8 @@ public class TrajectoryQueue {
         this.maxSize = fixedSize;
     }
 
-    public void add(Vector2 element) {
-        Vector2 copy = new Vector2(element);
-        queue.offer(copy);
+    public void add(Vector2D element) {
+        queue.offer(element.cpy());
         pullingToMaxSize();
     }
 
@@ -27,7 +26,7 @@ public class TrajectoryQueue {
         while (queue.size() > maxSize) queue.poll();
     }
 
-    public Iterable<Vector2> getElements() {
+    public Iterable<Vector2D> getElements() {
         return queue;
     }
 

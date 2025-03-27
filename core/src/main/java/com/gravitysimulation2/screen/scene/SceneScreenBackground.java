@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector4;
 import com.gravitysimulation2.gameinterface.BackgroundActor;
 
 public class SceneScreenBackground extends BackgroundActor {
@@ -23,7 +24,7 @@ public class SceneScreenBackground extends BackgroundActor {
             0,
             size.x,
             size.y,
-            Color.DARK_GRAY
+            new Vector4(Color.DARK_GRAY.r, Color.DARK_GRAY.g, Color.DARK_GRAY.b, 0.25f)
         );
 
         endShape(batch);

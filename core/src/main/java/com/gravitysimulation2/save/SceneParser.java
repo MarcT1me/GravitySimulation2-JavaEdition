@@ -11,6 +11,7 @@ import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.objects.object.objectypes.ObjectTypes;
 import com.gravitysimulation2.objects.physic.PhysicBody;
+import com.gravitysimulation2.objects.physic.Vector2D;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,13 +30,13 @@ public class SceneParser {
         String gameObjectName = entry.getKey();
         Map<String, Object> gameObjectData = (Map<String, Object>) entry.getValue();
 
-        Vector2 pos = parseVector2(gameObjectData.get("pos"));
-        Vector2 velocity = parseVector2(gameObjectData.get("vel"));
-        float angle = ((Number) gameObjectData.get("angle")).floatValue();
-        float mass = ((Number) gameObjectData.get("mass")).floatValue();
-        float density = ((Number) gameObjectData.get("density")).floatValue();
-        float radius = ((Number) gameObjectData.get("radius")).floatValue();
-        float angularVelocity = ((Number) gameObjectData.get("angularVelocity")).floatValue();
+        Vector2D pos = parseVector2D(gameObjectData.get("pos"));
+        Vector2D velocity = parseVector2D(gameObjectData.get("vel"));
+        double angle = ((Number) gameObjectData.get("angle")).doubleValue();
+        double mass = ((Number) gameObjectData.get("mass")).doubleValue();
+        double density = ((Number) gameObjectData.get("density")).doubleValue();
+        double radius = ((Number) gameObjectData.get("radius")).doubleValue();
+        double angularVelocity = ((Number) gameObjectData.get("angularVelocity")).doubleValue();
 
         // object data
         Map<String, Object> objectData = (Map<String, Object>) gameObjectData.get("objectData");
@@ -59,9 +60,9 @@ public class SceneParser {
         return new Vector3(array.get(0).floatValue(), array.get(1).floatValue(), array.get(2).floatValue());
     }
 
-    public static Vector2 parseVector2(Object value) {
+    public static Vector2D parseVector2D(Object value) {
         ArrayList<Double> array = (ArrayList<Double>) value;
-        return new Vector2(array.get(0).floatValue(), array.get(1).floatValue());
+        return new Vector2D(array.get(0), array.get(1));
     }
 
     private static Object parseJson(JsonValue jsonValue) {

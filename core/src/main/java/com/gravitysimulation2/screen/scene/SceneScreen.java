@@ -57,7 +57,7 @@ public class SceneScreen extends ScreenObject {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 float curSpeed = GameScene.speeds.get("simulation");
-                if (curSpeed < 16384)
+                if (curSpeed < 1048576)
                     GameScene.speeds.put("simulation", curSpeed * 2f);
             }
         });
@@ -76,12 +76,9 @@ public class SceneScreen extends ScreenObject {
         });
         // lbl
         simulationSpeedLbl = createLabel(
-            "simulation speed: xxxxx" + GameScene.speeds.get("simulation"), Color.WHITE, relativeFontSize
+            "simulation speed: xxxxxxx.x" + GameScene.speeds.get("simulation"), Color.WHITE, relativeFontSize
         );
         interfaceStartX = relativeButtonSize * 2 + relativePad * 2 + simulationSpeedLbl.getWidth() + relativePad * 2;
-
-        // camera zoom
-        cameraZoomLbl = createLabel("camera zoom: xxxxx", Color.WHITE, relativeFontSize);
 
         // extra slow button
         extraSlowBtn = createCheckBox("Extra slow", Color.WHITE, relativeFontSize);
@@ -99,6 +96,9 @@ public class SceneScreen extends ScreenObject {
                 }
             }
         });
+
+        // camera zoom
+        cameraZoomLbl = createLabel("camera zoom: xxxxx", Color.WHITE, relativeFontSize);
 
         // background
         rootGroup.addActor(new SceneScreenBackground(
@@ -148,17 +148,17 @@ public class SceneScreen extends ScreenObject {
         curPosX += relativePad + simulationSpeedDownBtn.getWidth();
         simulationSpeedLbl.setPosition(curPosX, curPosY);
 
-        // camera
+        // extra slow speed btn
         curPosX = Gdx.graphics.getWidth() - interfaceStartX + relativePad;
         curPosY += simulationSpeedUpBtn.getHeight() + relativePad;
 
-        cameraZoomLbl.setPosition(curPosX, curPosY);
-
-        // extra slow speed btn
-        curPosX = Gdx.graphics.getWidth() - interfaceStartX + relativePad;
-        curPosY += cameraZoomLbl.getHeight() + relativePad;
-
         extraSlowBtn.setPosition(curPosX, curPosY);
+
+        // camera
+        curPosX = Gdx.graphics.getWidth() - interfaceStartX + relativePad;
+        curPosY += extraSlowBtn.getHeight() + relativePad;
+
+        cameraZoomLbl.setPosition(curPosX, curPosY);
     }
 
     @Override

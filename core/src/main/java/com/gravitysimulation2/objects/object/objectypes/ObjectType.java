@@ -15,6 +15,7 @@ import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.IRenderer;
 import com.gravitysimulation2.objects.IUpdatable;
+import com.gravitysimulation2.objects.physic.Vector2D;
 import com.gravitysimulation2.save.SceneParser;
 
 import java.util.Map;
@@ -75,12 +76,12 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
         }
     }
 
-    public Vector2 fromWorldToScreenPosition(Vector2 vec) {
+    public Vector2 fromWorldToScreenPosition(Vector2D vec) {
         return sourceObject.scene.camera.fromWorldToScreenPosition(vec);
     }
 
-    public float fromWorldToScreenScalar(float scalar) {
-        return scalar / sourceObject.scene.camera.zoom;
+    public float fromWorldToScreenScalar(double scalar) {
+        return (float) (scalar / (double) sourceObject.scene.camera.zoom);
     }
 
     @Override
@@ -97,26 +98,35 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     }
 
     protected boolean isNotAllowedScreenPositions() {
-        return false;
-//        Vector2 screenSize =
-//            new Vector2(
-//                Gdx.graphics.getWidth(),
-//                Gdx.graphics.getHeight()
-//            );
-//        return screenPos.add(screenSize.cpy().scl(
-//            0.5f)
-//        ).len() > screenSize.cpy().scl(
-//            1.5f
-//        ).len();
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        Vector2 screenCenter = new Vector2(screenWidth / 2, screenHeight / 2);
+
+        Vector2 toObject = screenPos.cpy().sub(screenCenter);
+
+        float screenDiagonal = new Vector2(screenWidth, screenHeight).len();
+        float threshold = screenDiagonal * 1.25f;
+
+        return toObject.len() > threshold;
+    }
+
+    protected boolean isAllowRadius(float radius) {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        float screenDiagonal = new Vector2(screenWidth, screenHeight).len();
+        float threshold = screenDiagonal * 1.25f;
+
+        return radius < threshold;
+    }
+
+    protected void updateScreenPos() {
+        screenPos = fromWorldToScreenPosition(sourceObject.physicBody.pos);
     }
 
     @Override
     public void preRender() {
-        // prepare rendering
-        screenPos = fromWorldToScreenPosition(sourceObject.physicBody.pos);
-
-        if (isNotAllowedScreenPositions()) return;
-
         // enable all need GL functions
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -134,19 +144,23 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
 
     protected void renderVVector() {
         shapeRenderer.setColor(Color.RED);
+
+        Vector2D additionVector2D = sourceObject.physicBody.velocity.cpy().scl(graphicConfig.vVectorsScale);
+
         shapeRenderer.line(
             screenPos,
-            screenPos.cpy().add(sourceObject.physicBody.velocity.cpy().scl(graphicConfig.vVectorsScale))
+            screenPos.cpy().add((float) additionVector2D.x, (float) additionVector2D.y)
         );
     }
 
     protected void renderDirectionLine() {
         shapeRenderer.setColor(color.x, color.y, color.z, graphicConfig.dirLineAlpha);
         shapeRenderer.line(
-            (
-                new Vector2(
-                    Gdx.graphics.getWidth() / 2f,
-                    Gdx.graphics.getHeight() / 2f).cpy().add(screenPos)
+            new Vector2(
+                Gdx.graphics.getWidth() / 2f,
+                Gdx.graphics.getHeight() / 2f
+            ).cpy().add(
+                screenPos
             ).scl(0.5f),
             screenPos
         );
@@ -156,8 +170,8 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
         // render trajectory
         Vector2 prevPoins = null;
         int currentIndex = 0;
-        for (Vector2 point : trajectoryQueue.getElements()) {
-            point = fromWorldToScreenPosition(point);
+        for (Vector2D point : trajectoryQueue.getElements()) {
+            Vector2 curPoint = fromWorldToScreenPosition(point);
 
             // calculate alpha
             float alpha = (float) currentIndex / trajectoryQueue.size();
@@ -165,11 +179,11 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
 
             // render
             if (prevPoins != null) {
-                shapeRenderer.line(prevPoins, point);
+                shapeRenderer.line(prevPoins, curPoint);
             }
 
             // set prev
-            prevPoins = point;
+            prevPoins = curPoint;
             currentIndex++;
         }
     }
@@ -182,46 +196,20 @@ public abstract class ObjectType extends InterfaceObject implements IUpdatable, 
     @Override
     public void renderUiElements() {
         // name
-        Vector2 nameLblPos = screenPos.cpy().add(
-            new Vector2(
-                -nameLbl.getWidth() / 2f,
-                5
-            )
-        );
+        Vector2 nameLblPos = screenPos.cpy().add(new Vector2(-nameLbl.getWidth() / 2f, 5));
         nameLbl.setPosition(nameLblPos.x, nameLblPos.y);
 
         // pos
-        posLbl.setText(
-            String.format(
-                "pos: {x: %.2f, y: %.2f}",
-                sourceObject.physicBody.pos.x,
-                sourceObject.physicBody.pos.y
-            )
-        );
+        posLbl.setText(String.format("pos: {x: %.2f, y: %.2f}", sourceObject.physicBody.pos.x, sourceObject.physicBody.pos.y));
         posLbl.setSize(posLbl.getPrefWidth(), posLbl.getPrefHeight());
-        Vector2 posLblPos = screenPos.cpy().add(
-            new Vector2(
-                -posLbl.getWidth() / 2f,
-                -posLbl.getHeight())
-        );
+        Vector2 posLblPos = screenPos.cpy().add(new Vector2(-posLbl.getWidth() / 2f, -posLbl.getHeight()));
         posLbl.setPosition(posLblPos.x, posLblPos.y);
         // vel
-        vModLbl.setText(
-            String.format(
-                "vel: {x: %.2f, y: %.2f}",
-                sourceObject.physicBody.velocity.x,
-                sourceObject.physicBody.velocity.y
-            )
-        );
+        vModLbl.setText(String.format("vel: {x: %.2f, y: %.2f}", sourceObject.physicBody.velocity.x, sourceObject.physicBody.velocity.y));
         float curPosY = -5f;
         vModLbl.setSize(vModLbl.getPrefWidth(), vModLbl.getPrefHeight());
-        if (graphicConfig.showPositions)
-            curPosY -= posLbl.getHeight();
-        Vector2 vModLblPos = screenPos.cpy().add(
-            new Vector2(
-                -vModLbl.getWidth() / 2f,
-                -vModLbl.getHeight() / 2f + curPosY)
-        );
+        if (graphicConfig.showPositions) curPosY -= posLbl.getHeight();
+        Vector2 vModLblPos = screenPos.cpy().add(new Vector2(-vModLbl.getWidth() / 2f, -vModLbl.getHeight() / 2f + curPosY));
         vModLbl.setPosition(vModLblPos.x, vModLblPos.y);
     }
 
