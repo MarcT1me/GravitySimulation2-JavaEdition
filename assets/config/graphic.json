@@ -1,1 +1,5 @@
-{}
+{
+"trajectoryLen": 5000,
+"trajectoryInterval": 0.0050000004,
+"dirLineAlpha": 0.19999999
+}

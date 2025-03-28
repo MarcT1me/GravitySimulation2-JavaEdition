@@ -1,0 +1,30 @@
+{
+  "A": {
+    "pos": [5.33e9, 0.0],
+    "vel": [0.0, 75000.0],
+
+    "mass": 1.8e30,
+    "radius": 6.02e8,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "STAR", "color": [0.996, 0.894, 0.710], "force": 0.0}
+  },
+  "B": {
+    "pos": [-5.33e9, 0.0],
+    "vel": [0.0, -75000.0],
+
+    "mass": 1.8e30,
+    "radius": 6.02e8,
+
+    "density": 0.0,
+
+    "angle": 0.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "STAR", "color": [1.0, 0.698, 0.416], "force": 0.0}
+  }
+}
