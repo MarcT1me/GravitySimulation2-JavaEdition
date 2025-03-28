@@ -11,6 +11,7 @@ import com.gravitysimulation2.config.GameConfig;
 import com.gravitysimulation2.objects.camera.Camera;
 import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.objects.camera.CameraController;
+import com.gravitysimulation2.objects.physic.Vector2D;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
     public long lastLoadTime = 0;
     public long createTime = 0;
     public float simulationSpeed = 1;
+    public int maxSimulationSpeedMod = 20;
 
     public static List<SaveConfig> scanSaves() {
         List<SaveConfig> saves = new LinkedList<>();
@@ -54,7 +56,8 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
         return saves;
     }
 
-    public SaveConfig() { }
+    public SaveConfig() {
+    }
 
     public SaveConfig(String name) {
         this.name = name;
@@ -85,12 +88,13 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
             new Class[]{String.class}, new Object[]{name},
             false
         );
-        Camera camera = new Camera(new Vector2(cameraConfig.posX, cameraConfig.posY), cameraConfig.zoom);
+        Camera camera = new Camera(
+            scene,
+            new Vector2D(cameraConfig.posX, cameraConfig.posY),
+            cameraConfig.zoom
+        );
         scene.setCamera(camera);
         scene.setCameraController(new CameraController(camera));
-
-        // simulation speed
-        GameScene.speeds.put("simulation", simulationSpeed);
 
         try {
             Thread.sleep(1000);

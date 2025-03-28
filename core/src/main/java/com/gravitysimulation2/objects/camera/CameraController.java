@@ -8,6 +8,8 @@ import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
 import com.gravitysimulation2.objects.IConfigNeeded;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class CameraController implements InputProcessor, IConfigNeeded {
     private final Camera camera;
     private float moveSpeed;
@@ -81,6 +83,27 @@ public class CameraController implements InputProcessor, IConfigNeeded {
             lastTouch.set(screenX, screenY);
             isDragging = true;
             return true;
+        } else if (button == Input.Buttons.MIDDLE) {
+            AtomicBoolean isFindCollision = new AtomicBoolean(false);
+            camera.scene.objects.values().forEach(
+                object -> {
+                    Vector2 objDistVec = camera.fromWorldToScreenPosition(
+                        object.physicBody.pos
+                    ).sub(
+                        new Vector2(
+                            screenX,
+                            Gdx.graphics.getHeight() - screenY
+                        )
+                    );
+                    if (objDistVec.len() < 20) {
+                        camera.attachToObject(object);
+                        isFindCollision.set(true);
+                    }
+                }
+            );
+            if (!isFindCollision.get())
+                camera.cancelAttach();
+            return isFindCollision.get();
         }
         return false;
     }
@@ -120,12 +143,11 @@ public class CameraController implements InputProcessor, IConfigNeeded {
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        camera.zoom(
-            amountY * zoomSpeed
-//            ,
-//            new Vector2(
-//                Gdx.input.getX(), Gdx.input.getY()
-//            )
+        camera.zoomToPoint(
+            amountY * zoomSpeed,
+            new Vector2(
+                Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()
+            )
         );
         return true;
     }

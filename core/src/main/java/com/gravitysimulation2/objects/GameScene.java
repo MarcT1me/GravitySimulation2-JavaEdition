@@ -25,7 +25,6 @@ public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdata
     public SaveConfig saveConfig;
 
     public final Map<String, GameObject> objects = new HashMap<>();
-    public static final Map<String, Float> speeds = new HashMap<>();
 
     public Camera camera;
     public CameraController cameraController;
@@ -92,6 +91,7 @@ public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdata
 
     @Override
     public void preRender() {
+        camera.updateAttach();
         objects.values().forEach(GameObject::preRender);
     }
 

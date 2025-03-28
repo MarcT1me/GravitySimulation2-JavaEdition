@@ -45,7 +45,7 @@ public abstract class ObjectType extends InterfaceObject implements IConfigNeede
 
         this.shapeRenderer = sourceObject.scene.shapeRenderer;
         this.trajectoryQueue = new TrajectoryQueue();
-        this.trajectoryTimer = new SimpleConditionalTimer();
+        this.trajectoryTimer = new SimpleConditionalTimer(sourceObject);
 
         applyConfigs();
     }

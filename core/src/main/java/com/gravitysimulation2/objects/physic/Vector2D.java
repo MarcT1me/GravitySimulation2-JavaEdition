@@ -1,5 +1,7 @@
 package com.gravitysimulation2.objects.physic;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Vector2D {
     public double x;
     public double y;
@@ -61,5 +63,14 @@ public class Vector2D {
     public void setZero() {
         x = 0;
         y = 0;
+    }
+
+    public void set(Vector2D newVec) {
+        x = newVec.x;
+        y = newVec.y;
+    }
+
+    public Vector2 toVector2() {
+        return new Vector2((float) x, (float) y);
     }
 }

@@ -50,7 +50,7 @@ public class GameObject implements IUpdatable, IRenderer, Disposable {
 
     @Override
     public void update(float deltaTime) {
-        float simulationSpeed = GameScene.speeds.get("simulation");
+        float simulationSpeed = scene.saveConfig.simulationSpeed;
 
         physicBody.updateVelocity(deltaTime * simulationSpeed);
         physicBody.updatePos(deltaTime * simulationSpeed);

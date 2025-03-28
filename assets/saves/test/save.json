@@ -2,5 +2,6 @@
   "name": "test",
   "lastLoadTime": 0,
   "createTime": 0,
-  "simulationSpeed": 8
+  "simulationSpeed": 8,
+  "maxSimulationSpeedMod": 15
 }

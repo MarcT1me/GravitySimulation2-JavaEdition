@@ -178,7 +178,7 @@ public class GraphicSettingsField extends SettingsMenuField {
         rootGroup.addActor(trajectoryLenSlider);
         rootGroup.addActor(trajectoryLenValueLbl);
 
-        rootGroup.addActor(dirLineLbl);
+        rootGroup.addActor(trajectoryIntervalLbl);
         rootGroup.addActor(trajectoryIntervalSlider);
         rootGroup.addActor(trajectoryIntervalValueLbl);
 

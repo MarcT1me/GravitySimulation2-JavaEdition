@@ -2,5 +2,6 @@
   "name": "sol",
   "lastLoadTime": 0,
   "createTime": 1742658930,
-  "simulationSpeed": 1
+  "simulationSpeed": 1,
+  "maxSimulationSpeedMod": 23
 }

@@ -24,7 +24,7 @@ public class SceneScreenBackground extends BackgroundActor {
             0,
             size.x,
             size.y,
-            new Vector4(Color.DARK_GRAY.r, Color.DARK_GRAY.g, Color.DARK_GRAY.b, 0.25f)
+            new Vector4(Color.DARK_GRAY.r, Color.DARK_GRAY.g, Color.DARK_GRAY.b, 0.33f)
         );
 
         endShape(batch);

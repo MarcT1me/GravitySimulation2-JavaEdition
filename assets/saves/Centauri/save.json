@@ -2,5 +2,6 @@
   "name": "Centauri",
   "lastLoadTime": 0,
   "createTime": 0,
-  "simulationSpeed": 65536
+  "simulationSpeed": 65536,
+  "maxSimulationSpeedMod": 25
 }
