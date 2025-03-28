@@ -100,7 +100,7 @@ public class GraphicSettingsField extends SettingsMenuField {
         curPosY -= relativePad + trajectoryLenLbl.getHeight();
         trajectoryLenLbl.setPosition(startPosX + relativePad, curPosY);
 
-        trajectoryLenSlider = createSlider(50f, 1000f, 1f, false, Color.GRAY);
+        trajectoryLenSlider = createSlider(50f, 5000f, 1f, false, Color.GRAY);
         trajectoryLenSlider.setSize(trajectoryLenSlider.getPrefWidth(), relativePad * 2.5f);
         trajectoryLenSlider.setValue(graphicConfig.trajectoryLen);
         trajectoryLenSlider.setPosition(
@@ -119,7 +119,7 @@ public class GraphicSettingsField extends SettingsMenuField {
         curPosY -= relativePad + trajectoryIntervalLbl.getHeight();
         trajectoryIntervalLbl.setPosition(startPosX + relativePad, curPosY);
 
-        trajectoryIntervalSlider = createSlider(0.001f, 0.15f, 0.001f, false, Color.GRAY);
+        trajectoryIntervalSlider = createSlider(0.001f, 1.0f, 0.001f, false, Color.GRAY);
         trajectoryIntervalSlider.setSize(trajectoryIntervalSlider.getPrefWidth(), relativePad * 2.5f);
         trajectoryIntervalSlider.setValue(graphicConfig.trajectoryInterval);
         trajectoryIntervalSlider.setPosition(

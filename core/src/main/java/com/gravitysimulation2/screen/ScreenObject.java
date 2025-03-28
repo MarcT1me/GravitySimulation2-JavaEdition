@@ -1,6 +1,7 @@
 package com.gravitysimulation2.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,11 +12,14 @@ import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.objects.IConfigNeeded;
+import com.gravitysimulation2.objects.camera.CameraController;
 
-public abstract class ScreenObject extends InterfaceObject implements Screen {
+public abstract class ScreenObject extends InterfaceObject implements Screen, IConfigNeeded {
     // screen stage
     protected ScreenViewport viewport;
     public Stage stage;
+    public InputMultiplexer inputMultiplexer;
 
     // scene
     protected GameScene scene;
@@ -26,11 +30,25 @@ public abstract class ScreenObject extends InterfaceObject implements Screen {
 
     protected ScreenObject() {
         super();
+        // create viewport
         viewport = new ScreenViewport();
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        // create screen stage
         stage = new Stage(viewport);
         stage.addActor(rootGroup);
-        background = new DefaultBackground();
+
+        background = new DefaultBackground();  // bg
+        inputMultiplexer = new InputMultiplexer();  // input
+    }
+
+    public void updateInputMultiplexer() {
+        inputMultiplexer.clear();
+        inputMultiplexer.addProcessor(stage);
+        if (scene != null) {
+            CameraController cameraController = scene.cameraController;
+            if (cameraController != null)
+                inputMultiplexer.addProcessor(cameraController);
+        }
     }
 
     @Override

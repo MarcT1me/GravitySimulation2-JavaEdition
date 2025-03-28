@@ -2,9 +2,10 @@ package com.gravitysimulation2.objects.camera;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.gravitysimulation2.objects.IUpdatable;
 import com.gravitysimulation2.objects.physic.Vector2D;
 
-public class Camera {
+public class Camera implements IUpdatable {
     public Vector2 pos;
     public float zoom;
 
@@ -28,10 +29,20 @@ public class Camera {
         zoom += offset * zoom;
     }
 
-    public void zoomToPoint(float deltaZoom, Vector2D screenPoint) {
-        Vector2 worldBefore = fromWorldToScreenPosition(screenPoint);
+    public void zoomToPoint(float deltaZoom, Vector2 screenPoint) {
+        Vector2 worldBefore = fromWorldToScreenPosition(new Vector2D(screenPoint.x, screenPoint.y));
         zoom += deltaZoom;
-        Vector2 worldAfter = fromWorldToScreenPosition(screenPoint);
+        Vector2 worldAfter = fromWorldToScreenPosition(new Vector2D(screenPoint.x, screenPoint.y));
         pos.add(worldAfter.sub(worldBefore));
+    }
+
+    @Override
+    public void preUpdate(float deltaTime) {
+
+    }
+
+    @Override
+    public void update(float deltaTime) {
+
     }
 }

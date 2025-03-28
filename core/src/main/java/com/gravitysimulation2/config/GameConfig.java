@@ -19,6 +19,10 @@ public class GameConfig implements Config<GameConfig> {
     public boolean showFps = true;
     public boolean showVersion = true;
 
+    public float cameraMoveSpeed = 500.0f;
+    public float cameraZoomSpeed = 0.5f;
+    public float mouseSensitivity = 1f;
+
     static {
         loadFromProperties();
     }

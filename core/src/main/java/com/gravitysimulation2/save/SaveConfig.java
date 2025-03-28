@@ -10,6 +10,7 @@ import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
 import com.gravitysimulation2.objects.camera.Camera;
 import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.objects.camera.CameraController;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -84,7 +85,9 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
             new Class[]{String.class}, new Object[]{name},
             false
         );
-        scene.setCamera(new Camera(new Vector2(cameraConfig.posX, cameraConfig.posY), cameraConfig.zoom));
+        Camera camera = new Camera(new Vector2(cameraConfig.posX, cameraConfig.posY), cameraConfig.zoom);
+        scene.setCamera(camera);
+        scene.setCameraController(new CameraController(camera));
 
         // simulation speed
         GameScene.speeds.put("simulation", simulationSpeed);

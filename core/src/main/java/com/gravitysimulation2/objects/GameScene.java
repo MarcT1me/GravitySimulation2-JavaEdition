@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
 import com.gravitysimulation2.objects.camera.Camera;
+import com.gravitysimulation2.objects.camera.CameraController;
 import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.physic.PhysicBody;
 import com.gravitysimulation2.save.SaveConfig;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class GameScene extends InterfaceObject implements IUpdatable, IRenderer {
+public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdatable, IRenderer {
     public boolean loaded = false;
     public boolean paused = false;
 
@@ -27,6 +28,7 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer 
     public static final Map<String, Float> speeds = new HashMap<>();
 
     public Camera camera;
+    public CameraController cameraController;
 
     public ShapeRenderer shapeRenderer;
 
@@ -38,6 +40,10 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer 
 
     public void setCamera(Camera camera) {
         this.camera = camera;
+    }
+
+    public void setCameraController(CameraController controller){
+        this.cameraController = controller;
     }
 
     public void addObject(GameObject object) {
@@ -74,31 +80,9 @@ public class GameScene extends InterfaceObject implements IUpdatable, IRenderer 
 
     @Override
     public void update(float deltaTime) {
-        // Управление камерой
-        float moveSpeed = 500.0f * deltaTime;
-        float zoomSpeed = 0.5f * deltaTime;
-
-        // Движение стрелками
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            camera.move(new Vector2(-moveSpeed, 0));
+        if (cameraController != null) {
+            cameraController.update(deltaTime);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            camera.move(new Vector2(moveSpeed, 0));
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            camera.move(new Vector2(0, moveSpeed));
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.move(new Vector2(0, -moveSpeed));
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
-            camera.zoom(-zoomSpeed);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
-            camera.zoom(zoomSpeed);
-        }
-
         if (!paused) {
             objects.values().forEach(
                 gameObject -> gameObject.update(deltaTime)

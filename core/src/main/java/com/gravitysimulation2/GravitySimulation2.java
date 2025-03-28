@@ -97,7 +97,8 @@ public class GravitySimulation2 extends Game {
         super.setScreen(screen);
         if (screen != null) {
             screen.show();
-            Gdx.input.setInputProcessor(screen.stage);
+            screen.updateInputMultiplexer();
+            Gdx.input.setInputProcessor(screen.inputMultiplexer);
         }
     }
 

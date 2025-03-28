@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GraphicConfig;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
+import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.objects.IConfigNeeded;
 import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.IRenderer;
 import com.gravitysimulation2.objects.IUpdatable;
@@ -20,7 +22,7 @@ import com.gravitysimulation2.save.SceneParser;
 
 import java.util.Map;
 
-public abstract class ObjectType extends InterfaceObject implements IUpdatable, IRenderer, Disposable {
+public abstract class ObjectType extends InterfaceObject implements IConfigNeeded, IUpdatable, IRenderer, Disposable {
     public GameObject sourceObject;
     public Map<String, Object> objectData;
     public Vector2 screenPos;
