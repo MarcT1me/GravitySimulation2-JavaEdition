@@ -17,6 +17,7 @@ public class GameConfig implements Config<GameConfig> {
     // show settings
     public float interfaceSize = 1f;
     public boolean showFps = true;
+    public boolean showTps = true;
     public boolean showVersion = true;
 
     public float cameraMoveSpeed = 500.0f;

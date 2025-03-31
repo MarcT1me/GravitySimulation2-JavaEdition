@@ -8,7 +8,7 @@ public class SimulationConfig implements Config<SimulationConfig> {
 
     public float speed = 1f;
     public int maxSpeedMod = 20;
-    public int tps = 300;
+    public int tps = 0;
 
     public SimulationConfig() {
     }

@@ -19,6 +19,9 @@ public class Simulation extends Thread implements IConfigNeeded, IUpdatable, Dis
     private long nextTickTime;
     private long previousTickTime; // Время предыдущего тика
     public float deltaTime;
+    public int tickCount;
+    public long lastTpsUpdateTime;
+    public int currentTps;
 
     public Simulation(SimulationConfig config, SimulationSpace space) {
         this.config = config;
@@ -31,19 +34,17 @@ public class Simulation extends Thread implements IConfigNeeded, IUpdatable, Dis
         updateTickTime();
     }
 
-    public void updateTickTime() {
-        targetTickTimeNanos = NANOS_IN_SECOND / config.tps;
+    private void updateTickTime() {
+        if (config.tps == 0)
+            targetTickTimeNanos = 0;
+        else
+            targetTickTimeNanos = NANOS_IN_SECOND / config.tps;
     }
 
-    public void updateDeltaTime() {
-        long currentTime = System.nanoTime();
-        deltaTime = (currentTime - previousTickTime) / (float) NANOS_IN_SECOND; // Корректный расчет
-        previousTickTime = currentTime; // Обновляем время предыдущего тика
-    }
-
-    public void tick() {
+    private void tick() {
         nextTickTime += targetTickTimeNanos;
-        long sleepTimeNanos = nextTickTime - System.nanoTime();
+        long curTime = System.nanoTime();
+        long sleepTimeNanos = nextTickTime - curTime;
 
         if (sleepTimeNanos > 0) {
             try {
@@ -53,7 +54,26 @@ public class Simulation extends Thread implements IConfigNeeded, IUpdatable, Dis
             }
         }
 
-        updateDeltaTime();
+        updateDeltaTime(curTime);
+        updateTpsCounter(curTime);
+    }
+
+    private void updateDeltaTime(long curTime) {
+        deltaTime = (curTime - previousTickTime) / (float) NANOS_IN_SECOND; // Корректный расчет
+        previousTickTime = curTime; // Обновляем время предыдущего тика
+    }
+
+    private void updateTpsCounter(long curTime) {
+        if (curTime - lastTpsUpdateTime >= NANOS_IN_SECOND) {
+            currentTps = tickCount;
+            tickCount = 0;
+            lastTpsUpdateTime = curTime;
+        }
+        tickCount++;
+    }
+
+    public int getTps() {
+        return currentTps;
     }
 
     @Override
@@ -74,6 +94,7 @@ public class Simulation extends Thread implements IConfigNeeded, IUpdatable, Dis
     public void run() {
         previousTickTime = System.nanoTime(); // Инициализация времени предыдущего тика
         nextTickTime = previousTickTime;
+        lastTpsUpdateTime = previousTickTime;
 
         while (running) {
             if (!paused) {

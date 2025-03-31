@@ -127,7 +127,11 @@ public class SceneScreen extends ScreenObject {
     @Override
     public void render(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            menu.show();
+            if (!scene.simulation.paused) menu.show();
+            else {
+                menu.hide();
+                scene.simulation.paused = false;
+            }
         }
         super.render(delta);
     }

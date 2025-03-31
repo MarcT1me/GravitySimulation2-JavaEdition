@@ -39,10 +39,6 @@ public class LoadItemField extends InterfaceObject {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // show loading screen
-                GravitySimulation2.getGameMenu("load").hide();
-                GravitySimulation2.switchToScreen("loading");
-
                 // create scene and attach to screen
                 GameScene scene = new GameScene(saveConfig);
                 GravitySimulation2.setGameScene(scene, "game scene");
@@ -51,8 +47,12 @@ public class LoadItemField extends InterfaceObject {
                 // loading objects into new scene
                 scene.loaded = false;
                 new Thread(
-                    () -> saveConfig.loadScene(scene)
+                    () -> scene.load(false)
                 ).start();  // start loading scene in new thread
+
+                // show loading screen
+                GravitySimulation2.getGameMenu("load").hide();
+                GravitySimulation2.switchToScreen("loading");
             }
         });
         table.add(backButton).size(relativeButtonSizeX, relativeButtonSizeY).center().pad(relativePad);

@@ -27,6 +27,13 @@ public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdata
 
     public ShapeRenderer shapeRenderer;
 
+    public void load(boolean paused) {
+        loaded = false;
+        saveConfig.loadScene(this);
+        simulation.paused = paused;
+        loaded = true;
+    }
+
     public GameScene(SaveConfig saveConfig) {
         this.name = saveConfig.name;
         this.saveConfig = saveConfig;
@@ -58,6 +65,8 @@ public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdata
                 object.objectType.updateRootGroup();
             }
         );
+
+        simulation.applyConfigs();
     }
 
     public void resize(ScreenViewport viewport) {
@@ -106,12 +115,27 @@ public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdata
 
     }
 
-    @Override
-    public void dispose() {
+    public void clear() {
         objects.values().forEach(
             GameObject::dispose
         );
-        shapeRenderer.dispose();
+        objects.clear();
+        simulation.space.clear();
+    }
+
+    public void stopSimulation() {
         simulation.dispose();
+        try {
+            simulation.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        stopSimulation();
+        clear();
+        shapeRenderer.dispose();
     }
 }

@@ -1,0 +1,26 @@
+{
+  "obj2": {
+    "pos": [100.0, 0.0],
+    "vel": [0.0, 0.0],
+
+    "angle": 0.0,
+    "mass": 1e15,
+    "density": 1000.0,
+    "radius": 15.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [0.0, 255.0, 0.0]}
+  },
+  "obj1": {
+    "pos": [-100.0, 0.0],
+    "vel": [0.0, 0.0],
+
+    "angle": 0.0,
+    "mass": -1e15,
+    "density": 1000.0,
+    "radius": 15.0,
+    "angularVelocity": 0.0,
+
+    "objectData": {"type": "PLANET", "color": [255.0, 0.0, 0.0]}
+  }
+}

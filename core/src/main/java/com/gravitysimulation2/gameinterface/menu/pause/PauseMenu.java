@@ -59,18 +59,18 @@ public class PauseMenu extends MenuObject {
         restartBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GravitySimulation2.switchToScreen("loading");
-
                 // get current scene and save config
                 GameScene scene = GravitySimulation2.getGameScene("game scene");
-                scene.dispose();
-                SaveConfig saveConfig = scene.saveConfig;
+                scene.stopSimulation();
+                scene.clear();
 
                 // loading objects into old scene
-                scene.loaded = false;
                 new Thread(
-                    () -> saveConfig.loadScene(scene)
+                    () -> scene.load(true)
                 ).start();  // start loading scene in new thread
+
+                // switch to loading screen
+                GravitySimulation2.switchToScreen("loading");
             }
         });
 
@@ -133,6 +133,7 @@ public class PauseMenu extends MenuObject {
     public void show() {
         super.show();
         GravitySimulation2.getGameScene("game scene").simulation.paused = true;
+        System.out.println();
     }
 
     @Override

@@ -26,6 +26,7 @@ public abstract class ScreenObject extends InterfaceObject implements Screen, IC
     DefaultBackground background;
 
     Label fpsLbl;
+    Label tpsLbl;
     Label versionLbl;
 
     protected ScreenObject() {
@@ -57,7 +58,10 @@ public abstract class ScreenObject extends InterfaceObject implements Screen, IC
 
         fpsLbl = createLabel("FPS: 0000", Color.WHITE, 1f);
 
+        tpsLbl = createLabel("FPS: 0000", Color.WHITE, 1f);
+
         rootGroup.addActor(fpsLbl);
+        rootGroup.addActor(tpsLbl);
         rootGroup.addActor(versionLbl);
         applyConfigs();
     }
@@ -81,6 +85,12 @@ public abstract class ScreenObject extends InterfaceObject implements Screen, IC
         fpsLbl.setVisible(config.showFps);
         if (config.showVersion) curPosY += versionLbl.getHeight();
         fpsLbl.setPosition(5, curPosY);
+
+        float curPosX = fpsLbl.getWidth() + 10;
+
+        tpsLbl.setVisible(config.showTps);
+        if (!config.showFps) curPosX = 5;
+        tpsLbl.setPosition(curPosX, curPosY);
     }
 
     @Override
@@ -125,6 +135,13 @@ public abstract class ScreenObject extends InterfaceObject implements Screen, IC
     public void renderUiElements() {
         if (fpsLbl.isVisible())
             fpsLbl.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
+        if (tpsLbl.isVisible())
+            tpsLbl.setText("TPS: " + (
+                    scene == null
+                        ? "-"
+                        : String.valueOf(scene.simulation.getTps())
+                )
+            );
     }
 
     @Override

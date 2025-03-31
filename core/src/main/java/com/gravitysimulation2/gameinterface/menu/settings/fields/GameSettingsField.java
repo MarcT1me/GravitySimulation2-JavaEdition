@@ -16,6 +16,7 @@ public class GameSettingsField extends SettingsMenuField {
     Slider interfaceSizeSlider;
     Label interfaceSizeSliderValueLbl;
     CheckBox fpsBox;
+    CheckBox tpsBox;
     CheckBox versionBox;
 
     Slider cameraMoveSpeedSlider;
@@ -67,6 +68,15 @@ public class GameSettingsField extends SettingsMenuField {
 
         curPosY -= relativePad + fpsBox.getHeight();
         fpsBox.setPosition(startPosX, curPosY);
+
+        // tps
+        tpsBox = createCheckBox(
+            "show tps", Color.WHITE, relativeFontSize
+        );
+        tpsBox.setChecked(gameConfig.showTps);
+
+        curPosY -= relativePad + tpsBox.getHeight();
+        tpsBox.setPosition(startPosX, curPosY);
 
         // version
         versionBox = createCheckBox(
@@ -148,6 +158,7 @@ public class GameSettingsField extends SettingsMenuField {
         rootGroup.addActor(interfaceSizeSlider);
         rootGroup.addActor(interfaceSizeSliderValueLbl);
         rootGroup.addActor(fpsBox);
+        rootGroup.addActor(tpsBox);
         rootGroup.addActor(versionBox);
 
         rootGroup.addActor(cameraMoveLbl);
@@ -177,6 +188,7 @@ public class GameSettingsField extends SettingsMenuField {
     public void applySettings() {
         gameConfig.interfaceSize = interfaceSizeSlider.getValue();
         gameConfig.showFps = fpsBox.isChecked();
+        gameConfig.showTps = tpsBox.isChecked();
         gameConfig.showVersion = versionBox.isChecked();
 
         gameConfig.cameraMoveSpeed = cameraMoveSpeedSlider.getValue();
