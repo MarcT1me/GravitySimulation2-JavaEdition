@@ -33,5 +33,6 @@ public class SceneLoadingScreen extends ScreenObject {
 
     private static void switchToScene() {
         GravitySimulation2.switchToScreen("game scene");
+        GravitySimulation2.getGameScene("game scene").simulation.start();
     }
 }

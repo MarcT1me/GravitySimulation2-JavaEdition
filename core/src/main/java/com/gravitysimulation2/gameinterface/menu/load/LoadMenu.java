@@ -11,8 +11,8 @@ import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.menu.MenuObject;
 import com.gravitysimulation2.save.SaveConfig;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 public class LoadMenu extends MenuObject {
     List<LoadItemField> items = new LinkedList<>();

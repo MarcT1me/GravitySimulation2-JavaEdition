@@ -2,15 +2,17 @@ package com.gravitysimulation2.save;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
 import com.gravitysimulation2.config.Config;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GameConfig;
-import com.gravitysimulation2.objects.camera.Camera;
 import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.objects.camera.Camera;
 import com.gravitysimulation2.objects.camera.CameraController;
+import com.gravitysimulation2.objects.object.GameObject;
+import com.gravitysimulation2.objects.physic.Simulation;
+import com.gravitysimulation2.objects.physic.SimulationSpace;
 import com.gravitysimulation2.objects.physic.Vector2D;
 
 import java.time.Instant;
@@ -22,11 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 public class SaveConfig implements Config<SaveConfig>, Disposable {
-    public String name = "default";
+    public String name;
     public long lastLoadTime = 0;
     public long createTime = 0;
-    public float simulationSpeed = 1;
-    public int maxSimulationSpeedMod = 20;
 
     public static List<SaveConfig> scanSaves() {
         List<SaveConfig> saves = new LinkedList<>();
@@ -74,12 +74,27 @@ public class SaveConfig implements Config<SaveConfig>, Disposable {
     }
 
     public void loadScene(GameScene scene) {
+        // simulation
+        SimulationConfig simulationConfig = ConfigManager.load(
+            SimulationConfig.class, "simulation",
+            new Class[]{String.class}, new Object[]{name},
+            false
+        );
+        SimulationSpace space = new SimulationSpace();
+        Simulation simulation = new Simulation(
+            simulationConfig,
+            space
+        );
+        scene.setSimulation(simulation);
+
         // objects
         Map<String, Object> sceneDataMap = SceneParser.loadSave(
             GameConfig.savesDir + "/" + name + "/scene.json"
         );
         for (Map.Entry<String, Object> entry : sceneDataMap.entrySet()) {
-            scene.addObject(SceneParser.createObject(scene, entry));
+            GameObject object = SceneParser.createObject(scene, entry);
+            scene.addObject(object);  // scene
+            space.addBody(object.physicBody);  // simulation
         }
 
         // camera

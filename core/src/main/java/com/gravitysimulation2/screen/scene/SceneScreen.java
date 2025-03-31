@@ -2,15 +2,14 @@ package com.gravitysimulation2.screen.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import com.gravitysimulation2.GravitySimulation2;
 import com.gravitysimulation2.gameinterface.menu.load.LoadMenu;
 import com.gravitysimulation2.gameinterface.menu.pause.PauseMenu;
@@ -25,7 +24,6 @@ public class SceneScreen extends ScreenObject {
     float relativePad;
     float interfaceStartX;
     CheckBox extraSlowBtn;
-    CheckBox pauseBtn;
     Label cameraZoomLbl;
     Label simulationSpeedLbl;
     TextButton simulationSpeedDownBtn;
@@ -56,8 +54,8 @@ public class SceneScreen extends ScreenObject {
         simulationSpeedUpBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (scene.saveConfig.simulationSpeed < Math.pow(2, scene.saveConfig.maxSimulationSpeedMod))
-                    scene.saveConfig.simulationSpeed *= 2;
+                if (scene.simulation.config.speed < Math.pow(2, scene.simulation.config.maxSpeedMod))
+                    scene.simulation.config.speed *= 2;
             }
         });
         // down
@@ -68,13 +66,13 @@ public class SceneScreen extends ScreenObject {
         simulationSpeedDownBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (scene.saveConfig.simulationSpeed > 0.0625)
-                    scene.saveConfig.simulationSpeed /= 2;
+                if (scene.simulation.config.speed > 0.0625)
+                    scene.simulation.config.speed /= 2;
             }
         });
         // lbl
         simulationSpeedLbl = createLabel(
-            "simulation speed: xxxxxxx.x" + scene.saveConfig.simulationSpeed, Color.WHITE, relativeFontSize
+            "simulation speed: xxxxxxx.x", Color.WHITE, relativeFontSize
         );
         interfaceStartX = relativeButtonSize * 2 + relativePad * 2 + simulationSpeedLbl.getWidth() + relativePad * 2;
 
@@ -87,20 +85,11 @@ public class SceneScreen extends ScreenObject {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if (!extraSlowBtn.isChecked()) {
-                    scene.saveConfig.simulationSpeed = lastSimSpeed;
+                    scene.simulation.config.speed = lastSimSpeed;
                 } else {
-                    lastSimSpeed = scene.saveConfig.simulationSpeed;
-                    scene.saveConfig.simulationSpeed =  0.0000000001f;
+                    lastSimSpeed = scene.simulation.config.speed;
+                    scene.simulation.config.speed = 0.0000000001f;
                 }
-            }
-        });
-
-        pauseBtn = createCheckBox("Pause", Color.WHITE, relativeFontSize);
-        pauseBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                scene.paused = pauseBtn.isChecked();
             }
         });
 
@@ -113,8 +102,7 @@ public class SceneScreen extends ScreenObject {
                 interfaceStartX,
                 relativePad + relativeButtonSize + relativePad +
                     relativePad + extraSlowBtn.getHeight() +
-                    relativePad + cameraZoomLbl.getHeight() +
-                    relativePad + pauseBtn.getHeight()
+                    relativePad + cameraZoomLbl.getHeight()
             )
         ));
 
@@ -126,8 +114,6 @@ public class SceneScreen extends ScreenObject {
         rootGroup.addActor(extraSlowBtn);
 
         rootGroup.addActor(cameraZoomLbl);
-
-        rootGroup.addActor(pauseBtn);
 
         // menu
         rootGroup.addActor(menu.updateRootGroup().rootGroup);
@@ -151,7 +137,7 @@ public class SceneScreen extends ScreenObject {
         super.renderUiElements();
         settingsMenu.renderUiElements();
 
-        simulationSpeedLbl.setText("simulation speed: " + scene.saveConfig.simulationSpeed);
+        simulationSpeedLbl.setText("simulation speed: " + scene.simulation.config.speed);
         simulationSpeedLbl.setSize(simulationSpeedLbl.getPrefWidth(), simulationSpeedLbl.getPrefHeight());
 
         cameraZoomLbl.setText("camera zoom: " + scene.camera.zoom);
@@ -179,10 +165,5 @@ public class SceneScreen extends ScreenObject {
         curPosY += extraSlowBtn.getHeight() + relativePad;
 
         cameraZoomLbl.setPosition(curPosX, curPosY);
-
-        // pause
-        pauseBtn.setChecked(scene.paused);
-        curPosY += cameraZoomLbl.getHeight() + relativePad;
-        pauseBtn.setPosition(curPosX, curPosY);
     }
 }

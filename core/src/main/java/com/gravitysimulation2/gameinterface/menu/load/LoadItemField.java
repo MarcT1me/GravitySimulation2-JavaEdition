@@ -46,7 +46,7 @@ public class LoadItemField extends InterfaceObject {
                 // create scene and attach to screen
                 GameScene scene = new GameScene(saveConfig);
                 GravitySimulation2.setGameScene(scene, "game scene");
-                ((SceneScreen) GravitySimulation2.getGameScreen("game scene")).attachToScene(scene);
+                GravitySimulation2.getGameScreen("game scene").attachToScene(scene);
 
                 // loading objects into new scene
                 scene.loaded = false;

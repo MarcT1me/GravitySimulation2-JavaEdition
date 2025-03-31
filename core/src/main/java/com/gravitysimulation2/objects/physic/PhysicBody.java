@@ -1,13 +1,18 @@
 package com.gravitysimulation2.objects.physic;
 
+import com.gravitysimulation2.objects.IUpdatable;
+
+import java.util.List;
 import java.util.stream.Stream;
 
-public class PhysicBody extends Physic {
+public class PhysicBody extends Physic implements IUpdatable {
     // forces
     public final Vector2D F_total = new Vector2D();
     public final Vector2D F_gravity = new Vector2D();
     public final Vector2D F_tidal = new Vector2D();
     public final Vector2D F_torque = new Vector2D();
+    // simulation
+    public Simulation simulation;
 
     public Vector2D pos;  // general position
     public double angle;  // rotation
@@ -27,10 +32,13 @@ public class PhysicBody extends Physic {
     public double strength;
 
     public PhysicBody(
+        Simulation simulation,
         Vector2D pos, double angle,
         double mass, double density, double radius,
         Vector2D velocity, double angularVelocity
     ) {
+        this.simulation = simulation;
+
         this.pos = pos;
         this.angle = angle;
 
@@ -60,7 +68,7 @@ public class PhysicBody extends Physic {
     }
 
     // gravity
-    public void updateGravityForce(Stream<PhysicBody> objects) {
+    public void updateGravityForce(List<PhysicBody> objects) {
         F_gravity.setZero();
 
         objects
@@ -144,5 +152,22 @@ public class PhysicBody extends Physic {
 
     public void updatePos(float deltaTime) {
         pos.add(velocity.cpy().scl(deltaTime));
+    }
+
+
+    @Override
+    public void preUpdate(float deltaTime) {
+        F_total.setZero();
+
+        List<PhysicBody> bodyStream = simulation.space.getPhysicBodyes();
+
+        updateGravityForce(bodyStream);
+        addGravityForceToTotal();
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        updateVelocity(deltaTime);
+        updatePos(deltaTime);
     }
 }

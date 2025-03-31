@@ -2,13 +2,12 @@ package com.gravitysimulation2.save;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
-import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.object.objectypes.ObjectTypes;
 import com.gravitysimulation2.objects.physic.PhysicBody;
 import com.gravitysimulation2.objects.physic.Vector2D;
@@ -46,6 +45,7 @@ public class SceneParser {
             scene,
             gameObjectName,
             new PhysicBody(
+                scene.simulation,
                 pos, angle,
                 mass, density, radius,
                 velocity, angularVelocity

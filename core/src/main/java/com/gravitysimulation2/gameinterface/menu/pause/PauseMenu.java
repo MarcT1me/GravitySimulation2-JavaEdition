@@ -17,8 +17,6 @@ import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.save.SaveConfig;
 
 public class PauseMenu extends MenuObject {
-    private boolean scenePauseStatus = false;
-
     @Override
     public void setupUI() {
         float relativePad = getRelativeScreenHeightScalar(10f);
@@ -48,7 +46,7 @@ public class PauseMenu extends MenuObject {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 hide();
-                GravitySimulation2.getGameScene("game scene").paused = scenePauseStatus;
+                GravitySimulation2.getGameScene("game scene").simulation.paused = false;
             }
         });
 
@@ -65,6 +63,7 @@ public class PauseMenu extends MenuObject {
 
                 // get current scene and save config
                 GameScene scene = GravitySimulation2.getGameScene("game scene");
+                scene.dispose();
                 SaveConfig saveConfig = scene.saveConfig;
 
                 // loading objects into old scene
@@ -133,8 +132,7 @@ public class PauseMenu extends MenuObject {
     @Override
     public void show() {
         super.show();
-        scenePauseStatus = GravitySimulation2.getGameScene("game scene").paused;
-        GravitySimulation2.getGameScene("game scene").paused = true;
+        GravitySimulation2.getGameScene("game scene").simulation.paused = true;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class GraphicSettingsField extends SettingsMenuField {
         vBox.setPosition(startPosX, curPosY);
 
         // V scale
-        Label vScaleLbl = createLabel("V vectors scale:", Color.WHITE, relativeFontSize);
+        Label vScaleLbl = createLabel("V vectors scale ", Color.WHITE, relativeFontSize);
         curPosY -= relativePad + vScaleLbl.getHeight();
         vScaleLbl.setPosition(startPosX + relativePad, curPosY);
 
@@ -65,7 +65,7 @@ public class GraphicSettingsField extends SettingsMenuField {
             curPosY
         );
 
-        vScaleValueLbl = createLabel("scale: " + vScaleSlider.getValue(), Color.WHITE, relativeFontSize);
+        vScaleValueLbl = createLabel("" + vScaleSlider.getValue(), Color.WHITE, relativeFontSize);
         vScaleValueLbl.setPosition(
             startPosX + vScaleLbl.getWidth() + vScaleSlider.getWidth() + relativePad * 6,
             curPosY
@@ -86,61 +86,17 @@ public class GraphicSettingsField extends SettingsMenuField {
         );
         posBox.setChecked(graphicConfig.showPositions);
 
-        curPosY -= relativePad + posBox.getHeight();
+        curPosY -= relativePad * 3 + posBox.getHeight();
         posBox.setPosition(startPosX, curPosY);
-
-        // render trajectory
-        showTrajectoryBox = createCheckBox("render trajectory", Color.WHITE, relativeFontSize);
-        showTrajectoryBox.setChecked(graphicConfig.showTrajectory);
-        curPosY -= relativePad + showTrajectoryBox.getHeight();
-        showTrajectoryBox.setPosition(categoryStartX + relativePad, curPosY);
-
-        // trajectory len
-        Label trajectoryLenLbl = createLabel("trajectory len:", Color.WHITE, relativeFontSize);
-        curPosY -= relativePad + trajectoryLenLbl.getHeight();
-        trajectoryLenLbl.setPosition(startPosX + relativePad, curPosY);
-
-        trajectoryLenSlider = createSlider(50f, 5000f, 1f, false, Color.GRAY);
-        trajectoryLenSlider.setSize(trajectoryLenSlider.getPrefWidth(), relativePad * 2.5f);
-        trajectoryLenSlider.setValue(graphicConfig.trajectoryLen);
-        trajectoryLenSlider.setPosition(
-            categoryStartX + trajectoryLenLbl.getWidth() + relativePad * 3,
-            curPosY
-        );
-
-        trajectoryLenValueLbl = createLabel("len: " + trajectoryLenSlider.getValue(), Color.WHITE, relativeFontSize);
-        trajectoryLenValueLbl.setPosition(
-            startPosX + trajectoryLenLbl.getWidth() + trajectoryLenSlider.getWidth() + relativePad * 6,
-            curPosY
-        );
-
-        // trajectory interval
-        Label trajectoryIntervalLbl = createLabel("trajectory interval:", Color.WHITE, relativeFontSize);
-        curPosY -= relativePad + trajectoryIntervalLbl.getHeight();
-        trajectoryIntervalLbl.setPosition(startPosX + relativePad, curPosY);
-
-        trajectoryIntervalSlider = createSlider(0.001f, 1.0f, 0.001f, false, Color.GRAY);
-        trajectoryIntervalSlider.setSize(trajectoryIntervalSlider.getPrefWidth(), relativePad * 2.5f);
-        trajectoryIntervalSlider.setValue(graphicConfig.trajectoryInterval);
-        trajectoryIntervalSlider.setPosition(
-            categoryStartX + trajectoryIntervalLbl.getWidth() + relativePad * 3,
-            curPosY
-        );
-
-        trajectoryIntervalValueLbl = createLabel("interval: " + trajectoryIntervalSlider.getValue(), Color.WHITE, relativeFontSize);
-        trajectoryIntervalValueLbl.setPosition(
-            startPosX + trajectoryIntervalLbl.getWidth() + trajectoryIntervalSlider.getWidth() + relativePad * 6,
-            curPosY
-        );
 
         // direction line
         showDirectionBox = createCheckBox("render direction line", Color.WHITE, relativeFontSize);
         showDirectionBox.setChecked(graphicConfig.showDirectionLine);
-        curPosY -= relativePad + showDirectionBox.getHeight();
+        curPosY -= relativePad * 3 + showDirectionBox.getHeight();
         showDirectionBox.setPosition(categoryStartX + relativePad, curPosY);
 
         // direction line alpha
-        Label dirLineLbl = createLabel("direction line alpha:", Color.WHITE, relativeFontSize);
+        Label dirLineLbl = createLabel("direction line alpha ", Color.WHITE, relativeFontSize);
         curPosY -= relativePad + dirLineLbl.getHeight();
         dirLineLbl.setPosition(startPosX + relativePad, curPosY);
 
@@ -152,9 +108,53 @@ public class GraphicSettingsField extends SettingsMenuField {
             curPosY
         );
 
-        dirLineValueLbl = createLabel("alpha: " + dirLineSlider.getValue(), Color.WHITE, relativeFontSize);
+        dirLineValueLbl = createLabel("" + dirLineSlider.getValue(), Color.WHITE, relativeFontSize);
         dirLineValueLbl.setPosition(
             startPosX + dirLineLbl.getWidth() + dirLineSlider.getWidth() + relativePad * 6,
+            curPosY
+        );
+
+        // render trajectory
+        showTrajectoryBox = createCheckBox("render trajectory", Color.WHITE, relativeFontSize);
+        showTrajectoryBox.setChecked(graphicConfig.showTrajectory);
+        curPosY -= relativePad * 3 + showTrajectoryBox.getHeight();
+        showTrajectoryBox.setPosition(categoryStartX + relativePad, curPosY);
+
+        // trajectory len
+        Label trajectoryLenLbl = createLabel("trajectory len ", Color.WHITE, relativeFontSize);
+        curPosY -= relativePad + trajectoryLenLbl.getHeight();
+        trajectoryLenLbl.setPosition(startPosX + relativePad, curPosY);
+
+        trajectoryLenSlider = createSlider(50f, 5000f, 1f, false, Color.GRAY);
+        trajectoryLenSlider.setSize(trajectoryLenSlider.getPrefWidth(), relativePad * 2.5f);
+        trajectoryLenSlider.setValue(graphicConfig.trajectoryLen);
+        trajectoryLenSlider.setPosition(
+            categoryStartX + trajectoryLenLbl.getWidth() + relativePad * 3,
+            curPosY
+        );
+
+        trajectoryLenValueLbl = createLabel("" + trajectoryLenSlider.getValue(), Color.WHITE, relativeFontSize);
+        trajectoryLenValueLbl.setPosition(
+            startPosX + trajectoryLenLbl.getWidth() + trajectoryLenSlider.getWidth() + relativePad * 6,
+            curPosY
+        );
+
+        // trajectory interval
+        Label trajectoryIntervalLbl = createLabel("trajectory interval ", Color.WHITE, relativeFontSize);
+        curPosY -= relativePad + trajectoryIntervalLbl.getHeight();
+        trajectoryIntervalLbl.setPosition(startPosX + relativePad, curPosY);
+
+        trajectoryIntervalSlider = createSlider(0.001f, 1.0f, 0.001f, false, Color.GRAY);
+        trajectoryIntervalSlider.setSize(trajectoryIntervalSlider.getPrefWidth(), relativePad * 2.5f);
+        trajectoryIntervalSlider.setValue(graphicConfig.trajectoryInterval);
+        trajectoryIntervalSlider.setPosition(
+            categoryStartX + trajectoryIntervalLbl.getWidth() + relativePad * 3,
+            curPosY
+        );
+
+        trajectoryIntervalValueLbl = createLabel("" + trajectoryIntervalSlider.getValue(), Color.WHITE, relativeFontSize);
+        trajectoryIntervalValueLbl.setPosition(
+            startPosX + trajectoryIntervalLbl.getWidth() + trajectoryIntervalSlider.getWidth() + relativePad * 6,
             curPosY
         );
 
@@ -171,6 +171,13 @@ public class GraphicSettingsField extends SettingsMenuField {
         // pos
         rootGroup.addActor(posBox);
 
+        // dir line
+        rootGroup.addActor(showDirectionBox);
+
+        rootGroup.addActor(dirLineLbl);
+        rootGroup.addActor(dirLineSlider);
+        rootGroup.addActor(dirLineValueLbl);
+
         // trajectory
         rootGroup.addActor(showTrajectoryBox);
 
@@ -181,13 +188,6 @@ public class GraphicSettingsField extends SettingsMenuField {
         rootGroup.addActor(trajectoryIntervalLbl);
         rootGroup.addActor(trajectoryIntervalSlider);
         rootGroup.addActor(trajectoryIntervalValueLbl);
-
-        // dir line
-        rootGroup.addActor(showDirectionBox);
-
-        rootGroup.addActor(dirLineLbl);
-        rootGroup.addActor(dirLineSlider);
-        rootGroup.addActor(dirLineValueLbl);
     }
 
     @Override
@@ -195,19 +195,19 @@ public class GraphicSettingsField extends SettingsMenuField {
         // c scale
         vScaleSlider.setDisabled(!vBox.isChecked());
 
-        vScaleValueLbl.setText(String.format("scale: %.1f", vScaleSlider.getValue()));
+        vScaleValueLbl.setText(String.format("%.1f", vScaleSlider.getValue()));
 
         // trajectory
         trajectoryLenSlider.setDisabled(!showTrajectoryBox.isChecked());
         trajectoryIntervalSlider.setDisabled(!showTrajectoryBox.isChecked());
 
-        trajectoryLenValueLbl.setText("len: " + (int) trajectoryLenSlider.getValue());
-        trajectoryIntervalValueLbl.setText(String.format("interval: %.3f", trajectoryIntervalSlider.getValue()));
+        trajectoryLenValueLbl.setText("" + (int) trajectoryLenSlider.getValue());
+        trajectoryIntervalValueLbl.setText(String.format("%.3f", trajectoryIntervalSlider.getValue()));
 
         // dir line
         dirLineSlider.setDisabled(!showDirectionBox.isChecked());
 
-        dirLineValueLbl.setText(String.format("alpha %.2f", dirLineSlider.getValue()));
+        dirLineValueLbl.setText(String.format("%.2f", dirLineSlider.getValue()));
     }
 
     public void applySettings() {

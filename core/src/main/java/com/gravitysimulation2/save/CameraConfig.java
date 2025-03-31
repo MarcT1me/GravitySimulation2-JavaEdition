@@ -4,7 +4,7 @@ import com.gravitysimulation2.config.Config;
 import com.gravitysimulation2.config.GameConfig;
 
 public class CameraConfig implements Config<CameraConfig> {
-    private String saveName = "default";
+    private String saveName;
 
     public float posX = 0f;
     public float posY = 0f;

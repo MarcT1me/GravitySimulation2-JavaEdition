@@ -15,7 +15,7 @@ public class GameConfig implements Config<GameConfig> {
     public static boolean isResizable = false;
 
     // show settings
-    public float interfaceSize = 1;
+    public float interfaceSize = 1f;
     public boolean showFps = true;
     public boolean showVersion = true;
 

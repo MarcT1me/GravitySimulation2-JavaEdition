@@ -3,7 +3,10 @@ package com.gravitysimulation2.gameinterface.menu.settings.fields;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.utils.Array;
 
 import com.gravitysimulation2.config.ConfigManager;
@@ -100,11 +103,11 @@ public class WindowSettingsField extends SettingsMenuField {
         );
         VSyncBox.setChecked(windowConfig.vsync);
 
-        curPosY -= relativePad + VSyncBox.getHeight();
+        curPosY -= relativePad * 3 + VSyncBox.getHeight();
         VSyncBox.setPosition(startPosX, curPosY);
 
         // FPS
-        Label targetFpsLbl = createLabel("Target FPS:", Color.WHITE, relativeFontSize);
+        Label targetFpsLbl = createLabel("target FPS ", Color.WHITE, relativeFontSize);
         curPosY -= relativePad + targetFpsLbl.getHeight();
         targetFpsLbl.setPosition(startPosX + relativePad, curPosY);
 
@@ -116,7 +119,7 @@ public class WindowSettingsField extends SettingsMenuField {
             curPosY
         );
 
-        fpsSliderValueLbl = createLabel("fps: " + fpsSlider.getValue(), Color.WHITE, relativeFontSize);
+        fpsSliderValueLbl = createLabel("" + fpsSlider.getValue(), Color.WHITE, relativeFontSize);
         fpsSliderValueLbl.setPosition(
             startPosX + targetFpsLbl.getWidth() + fpsSlider.getWidth() + relativePad * 6,
             curPosY
@@ -152,7 +155,7 @@ public class WindowSettingsField extends SettingsMenuField {
             fpsSlider.setValue(maxFps);
         }
 
-        fpsSliderValueLbl.setText("fps: " + (fpsSlider.getValue() == 0f ? "unlimited" : (int) fpsSlider.getValue()));
+        fpsSliderValueLbl.setText("" + (fpsSlider.getValue() == 0f ? "unlimited" : (int) fpsSlider.getValue()));
     }
 
     private String getCurrentResolution() {

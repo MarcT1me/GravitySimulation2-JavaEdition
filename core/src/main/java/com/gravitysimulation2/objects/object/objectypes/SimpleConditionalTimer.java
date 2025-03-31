@@ -1,10 +1,9 @@
 package com.gravitysimulation2.objects.object.objectypes;
 
-import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.objects.object.GameObject;
 
 public class SimpleConditionalTimer {
-    private GameObject sourceObject;
+    private final GameObject sourceObject;
 
     private float timeAccumulator = 0f;
     private float intervalLength = 12;
@@ -19,7 +18,7 @@ public class SimpleConditionalTimer {
 
     public boolean update(float deltaTime) {
         timeAccumulator += deltaTime;
-        return timeAccumulator * sourceObject.scene.saveConfig.simulationSpeed > intervalLength;
+        return timeAccumulator * sourceObject.scene.simulation.config.speed > intervalLength;
     }
 
     public void restore() {

@@ -28,7 +28,8 @@ public class Camera implements IUpdatable {
     }
 
     public void cancelAttach() {
-        if (attachObject == null) return;
+        if (attachObject == null)
+            return;
         pos.set(attachObject.physicBody.pos.cpy());
         this.attachObject = null;
     }
@@ -41,27 +42,38 @@ public class Camera implements IUpdatable {
     }
 
     public Vector2 fromWorldToScreenPosition(Vector2D objectPos) {
-        return new Vector2(
-            (float) (objectPos.x - (pos.x + attachPos.x)) / zoom + Gdx.graphics.getWidth() / 2f,
-            (float) (objectPos.y - (pos.y + attachPos.y)) / zoom + Gdx.graphics.getHeight() / 2f
+        return objectPos.cpy().sub(
+            pos.cpy().add(
+                attachPos
+            )
+        ).scl(
+            1 / zoom
+        ).toVector2().add(
+            getScreenCenter()
         );
     }
 
     public Vector2D fromScreenToWorldPosition(Vector2 screenPos) {
-        Vector2 middleCalculateVec = screenPos.cpy().sub(
-            new Vector2(
-                Gdx.graphics.getWidth() / 2f,
-                Gdx.graphics.getHeight() / 2f
-            )
-        );
         return new Vector2D(
-            middleCalculateVec.x,
-            middleCalculateVec.y
-        ).scl(zoom).add(pos);
+            screenPos.cpy().sub(
+                getScreenCenter()
+            )
+        ).scl(
+            zoom
+        ).add(
+            pos
+        );
+    }
+
+    public static Vector2 getScreenCenter() {
+        return new Vector2(
+            Gdx.graphics.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 2f
+        );
     }
 
     public void move(Vector2 offset) {
-        pos.add(new Vector2D(offset.x, offset.y).scl(zoom));
+        pos.add(new Vector2D(offset).scl(zoom));
     }
 
     public void zoom(float offset) {
@@ -69,14 +81,30 @@ public class Camera implements IUpdatable {
     }
 
     public void zoomToPoint(float offset, Vector2 screenPoint) {
+        // excepting errors
+        if (zoom + offset <= 0f)  // except negative zoom
+            return;
+        if (offset < -0.5f)  // recursion calling to split zooming on smallest parts
+            zoomToPoint(offset / 2f, screenPoint);
+
         Vector2D before = fromScreenToWorldPosition(screenPoint);
+
+        // zooming
+        float backupZoom = zoom;
         zoom(offset);
+        if (zoom <= 0f)
+            zoom = backupZoom;
+
         Vector2D after = fromScreenToWorldPosition(screenPoint);
 
-        Vector2D zoomPoint;
-        zoomPoint = before.sub(after);
-        zoomPoint.scl(0.5f);
-        pos.add(new Vector2D(zoomPoint.x, zoomPoint.y));
+        // moving to screen point
+        pos.add(
+            before.sub(
+                after
+            ).scl(
+                0.5f
+            )
+        );
     }
 
     @Override

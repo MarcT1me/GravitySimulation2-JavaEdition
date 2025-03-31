@@ -1,6 +1,7 @@
 package com.gravitysimulation2.objects.object;
 
 import com.badlogic.gdx.utils.Disposable;
+
 import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.objects.IRenderer;
 import com.gravitysimulation2.objects.IUpdatable;
@@ -8,7 +9,6 @@ import com.gravitysimulation2.objects.object.objectypes.*;
 import com.gravitysimulation2.objects.physic.PhysicBody;
 
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class GameObject implements IUpdatable, IRenderer, Disposable {
     public String name;
@@ -38,23 +38,11 @@ public class GameObject implements IUpdatable, IRenderer, Disposable {
 
     @Override
     public void preUpdate(float deltaTime) {
-        physicBody.F_total.setZero();
-
-        Stream<PhysicBody> bodyStream = scene.getPhysicBodyStream();
-
-        physicBody.updateGravityForce(bodyStream);
-        physicBody.addGravityForceToTotal();
-
         objectType.preUpdate(deltaTime);
     }
 
     @Override
     public void update(float deltaTime) {
-        float simulationSpeed = scene.saveConfig.simulationSpeed;
-
-        physicBody.updateVelocity(deltaTime * simulationSpeed);
-        physicBody.updatePos(deltaTime * simulationSpeed);
-
         objectType.update(deltaTime);
     }
 

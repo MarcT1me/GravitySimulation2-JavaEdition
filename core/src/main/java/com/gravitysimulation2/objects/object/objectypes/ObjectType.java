@@ -12,11 +12,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.gravitysimulation2.config.ConfigManager;
 import com.gravitysimulation2.config.GraphicConfig;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
-import com.gravitysimulation2.objects.GameScene;
 import com.gravitysimulation2.objects.IConfigNeeded;
-import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.IRenderer;
 import com.gravitysimulation2.objects.IUpdatable;
+import com.gravitysimulation2.objects.object.GameObject;
 import com.gravitysimulation2.objects.physic.Vector2D;
 import com.gravitysimulation2.save.SceneParser;
 
@@ -53,14 +52,18 @@ public abstract class ObjectType extends InterfaceObject implements IConfigNeede
     @Override
     public void setupUI() {
         float relativeFontSize = getRelativeScreenHeightScalar(1f);
+        Vector2 screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         nameLbl = createLabel(sourceObject.name, Color.WHITE, relativeFontSize);
+        nameLbl.setPosition(screenSize.x, screenSize.y);
 
         vModLbl = createLabel("V: ", Color.WHITE, relativeFontSize);
         vModLbl.setVisible(graphicConfig.showVMods);
+        vModLbl.setPosition(screenSize.x, screenSize.y);
 
         posLbl = createLabel("pos: ", Color.WHITE, relativeFontSize);
         posLbl.setVisible(graphicConfig.showPositions);
+        posLbl.setPosition(screenSize.x, screenSize.y);
 
         rootGroup.addActor(nameLbl);
         rootGroup.addActor(vModLbl);
@@ -93,6 +96,8 @@ public abstract class ObjectType extends InterfaceObject implements IConfigNeede
 
     @Override
     public void update(float deltaTime) {
+        if (sourceObject.scene.simulation.paused) return;
+
         if (trajectoryTimer.update(deltaTime)) {
             trajectoryQueue.add(sourceObject.physicBody.pos);
             trajectoryTimer.restore();
@@ -108,7 +113,7 @@ public abstract class ObjectType extends InterfaceObject implements IConfigNeede
         Vector2 toObject = screenPos.cpy().sub(screenCenter);
 
         float screenDiagonal = new Vector2(screenWidth, screenHeight).len();
-        float threshold = screenDiagonal * 1.25f;
+        float threshold = screenDiagonal * 3.0f;
 
         return toObject.len() > threshold;
     }

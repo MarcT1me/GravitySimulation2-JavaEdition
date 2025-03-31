@@ -10,9 +10,17 @@ public class Vector2D {
         this(0.0, 0.0);
     }
 
+    public Vector2D(Vector2 vector) {
+        this(vector.x, vector.y);
+    }
+
     public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Vector2 toVector2() {
+        return new Vector2((float) x, (float) y);
     }
 
     public Vector2D cpy() {
@@ -68,9 +76,5 @@ public class Vector2D {
     public void set(Vector2D newVec) {
         x = newVec.x;
         y = newVec.y;
-    }
-
-    public Vector2 toVector2() {
-        return new Vector2((float) x, (float) y);
     }
 }

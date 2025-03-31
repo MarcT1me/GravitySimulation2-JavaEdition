@@ -6,17 +6,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import com.gravitysimulation2.config.*;
+import com.gravitysimulation2.config.ConfigManager;
+import com.gravitysimulation2.config.GameConfig;
+import com.gravitysimulation2.config.GraphicConfig;
+import com.gravitysimulation2.config.WindowConfig;
 import com.gravitysimulation2.gameinterface.InterfaceObject;
-import com.gravitysimulation2.screen.loading.SceneLoadingScreen;
-import com.gravitysimulation2.gameinterface.menu.main.MainMenu;
-import com.gravitysimulation2.screen.ScreenObject;
 import com.gravitysimulation2.gameinterface.menu.load.LoadMenu;
+import com.gravitysimulation2.gameinterface.menu.main.MainMenu;
 import com.gravitysimulation2.gameinterface.menu.pause.PauseMenu;
 import com.gravitysimulation2.gameinterface.menu.settings.SettingsMenu;
+import com.gravitysimulation2.objects.GameScene;
+import com.gravitysimulation2.screen.ScreenObject;
+import com.gravitysimulation2.screen.loading.SceneLoadingScreen;
 import com.gravitysimulation2.screen.mainmenu.MainMenuScreen;
 import com.gravitysimulation2.screen.scene.SceneScreen;
-import com.gravitysimulation2.objects.GameScene;
 
 import java.util.HashMap;
 import java.util.Map;
