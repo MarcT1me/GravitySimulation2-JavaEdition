@@ -28,7 +28,6 @@ public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdata
     public ShapeRenderer shapeRenderer;
 
     public void load(boolean paused) {
-        loaded = false;
         saveConfig.loadScene(this);
         simulation.paused = paused;
         loaded = true;
@@ -113,6 +112,12 @@ public class GameScene extends InterfaceObject implements IConfigNeeded, IUpdata
     @Override
     public void renderUiElements() {
 
+    }
+
+    public void unload() {
+        loaded = false;
+        stopSimulation();
+        clear();
     }
 
     public void clear() {

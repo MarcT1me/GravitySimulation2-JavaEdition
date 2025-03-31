@@ -2,7 +2,7 @@ package com.gravitysimulation2.config;
 
 public class GraphicConfig implements Config<GraphicConfig> {
     public int trajectoryLen = 750;
-    public float trajectoryInterval = 0.005f;
+    public float trajectoryInterval = 0.001f;
     public float vVectorsScale = 1f;
     public float dirLineAlpha = 0.5f;
 

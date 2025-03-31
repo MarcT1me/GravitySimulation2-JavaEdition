@@ -1,4 +1,6 @@
 {
-"trajectoryInterval": 0.0050000004,
-"vVectorsScale": 0.5
+"trajectoryLen": 630,
+"vVectorsScale": 0.5,
+"showVMods": false,
+"showPositions": false
 }

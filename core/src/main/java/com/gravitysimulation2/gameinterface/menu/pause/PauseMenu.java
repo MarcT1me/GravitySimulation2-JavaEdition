@@ -61,8 +61,8 @@ public class PauseMenu extends MenuObject {
             public void clicked(InputEvent event, float x, float y) {
                 // get current scene and save config
                 GameScene scene = GravitySimulation2.getGameScene("game scene");
-                scene.stopSimulation();
-                scene.clear();
+                scene.unload();
+                GravitySimulation2.getGameScreen("game scene").attachToScene(scene);
 
                 // loading objects into old scene
                 new Thread(
