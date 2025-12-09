@@ -1,0 +1,9 @@
+plugins {
+  id 'java-library'
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-shared'
+
+dependencies {
+}

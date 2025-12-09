@@ -1,0 +1,36 @@
+plugins {
+  id 'application'
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-server'
+
+application {
+  mainClass = 'com.gravitysimulation2.server.ServerMain'
+}
+
+dependencies {
+  implementation project(':shared')
+}
+
+jar {
+  archiveFileName.set("${appName}-${projectVersion}.jar")
+  duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+  from sourceSets.main.output
+  dependsOn configurations.runtimeClasspath
+  from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+  exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+  dependencies {
+    exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
+  }
+
+  manifest {
+    attributes 'Main-Class': application.mainClass
+  }
+
+  doLast {
+    file(archiveFile).setExecutable(true, false)
+  }
+}
+

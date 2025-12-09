@@ -35,6 +35,8 @@ public class GravitySimulation2 extends Game {
     public static void switchToScreen(String name) {
         ScreenObject screen = screenMap.get(name);
         instance.setScreen(screen);
+
+        SharedTest.test();
     }
 
     public static ScreenObject getGameScreen(String name) {
